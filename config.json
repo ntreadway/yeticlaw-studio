@@ -1,0 +1,193 @@
+{
+    "agents": {
+        "defaults": {
+            "model_name": "qwen3.5:4b",
+            "workspace": "/opt/yeticlaw/openclaw/workspace",
+            "restrict_to_workspace": false,
+            "max_history": 5,
+            "max_tool_iterations": 3,
+            "max_tokens": 8192,
+            "temperature": 0.7
+        },
+        "list": {
+            "main": {
+                "skill": "yetibot",
+                "description": "Default YetiBot assistant"
+            },
+            "creative-director": {
+                "skill": "creative-director",
+                "description": "Creative vision and tone"
+            },
+            "technical-director": {
+                "skill": "technical-director",
+                "description": "Unity architecture (code-gen)"
+            },
+            "producer": {
+                "skill": "producer",
+                "description": "Sprint planning and milestones"
+            },
+            "game-designer": {
+                "skill": "game-designer",
+                "description": "Mechanics, GDDs, MDA analysis"
+            },
+            "level-designer": {
+                "skill": "level-designer",
+                "description": "Level layouts and flow"
+            },
+            "systems-designer": {
+                "skill": "systems-designer",
+                "description": "Economy and progression systems"
+            },
+            "gameplay-programmer": {
+                "skill": "gameplay-programmer",
+                "description": "Unity C# player mechanics (code-gen)"
+            },
+            "engine-programmer": {
+                "skill": "engine-programmer",
+                "description": "Unity C# core systems (code-gen)"
+            },
+            "ai-programmer": {
+                "skill": "ai-programmer",
+                "description": "Unity C# enemy AI (code-gen)"
+            },
+            "ui-programmer": {
+                "skill": "ui-programmer",
+                "description": "Unity UI Toolkit (code-gen)"
+            },
+            "unity-specialist": {
+                "skill": "unity-specialist",
+                "description": "Deep Unity expertise (code-gen)"
+            },
+            "art-director": {
+                "skill": "art-director",
+                "description": "Visual style guide and art briefs",
+                "model_name": "nano-banana-2"
+            },
+            "sound-designer": {
+                "skill": "sound-designer",
+                "description": "Audio identity and FMOD"
+            },
+            "technical-artist": {
+                "skill": "technical-artist",
+                "description": "Shaders and VFX (code-gen)"
+            },
+            "narrative-director": {
+                "skill": "narrative-director",
+                "description": "Story structure and arcs"
+            },
+            "writer": {
+                "skill": "writer",
+                "description": "Dialogue and UI copy"
+            },
+            "world-builder": {
+                "skill": "world-builder",
+                "description": "Lore, factions, world bible"
+            },
+            "qa-tester": {
+                "skill": "qa-tester",
+                "description": "Test plans and bug reports"
+            },
+            "threejs-dev": {
+                "skill": "threejs-dev",
+                "description": "Three.js / WebGL games for VIVERSE"
+            },
+            "ai-consultant": {
+                "skill": "ai-consultant",
+                "description": "AI integration leads and pitches"
+            },
+            "email-writer": {
+                "skill": "email-writer",
+                "description": "Outreach for game dev, AI integration, AI apps"
+            },
+            "asset-approver": {
+                "skill": "asset-approver",
+                "description": "Budget gate \u2014 approves Nano Banana and Meshy requests before they fire"
+            },
+            "meshy": {
+                "skill": "meshy",
+                "description": "Meshy.ai 3D model generation \u2014 only runs after asset-approver approval"
+            }
+        }
+    },
+    "model_list": [
+        {
+            "model_name": "qwen3.5:4b",
+            "model": "openai/qwen3.5-4b-q4_k_m.gguf",
+            "api_base": "http://127.0.0.1:8080/v1",
+            "api_key": "none",
+            "timeout": 120
+        },
+        {
+            "model_name": "nano-banana-2",
+            "model": "gemini/gemini-3.1-flash-image-preview",
+            "api_key": "YOUR_GEMINI_API_KEY",
+            "timeout": 60
+        }
+    ],
+    "tools": {
+        "web": {
+            "enabled": true,
+            "duckduckgo": {
+                "enabled": true,
+                "max_results": 1
+            }
+        },
+        "exec": {
+            "enabled": true,
+            "allow_remote": false,
+            "allowlist": [
+                "rclone copy *",
+                "rclone mkdir *",
+                "rclone ls *",
+                "curl -s https://api.meshy.ai/*",
+                "curl -s -X POST https://api.meshy.ai/*",
+                "wget -q *meshy* -O /tmp/*",
+                "jq *"
+            ]
+        }
+    },
+    "channels": {
+        "telegram": {
+            "enabled": true,
+            "token": "your_telegram_bot_token",
+            "allow_from": [
+                "userID"
+            ],
+            "commands": {
+                "creativedirector": "creative-director",
+                "technicaldirector": "technical-director",
+                "producer": "producer",
+                "gamedesigner": "game-designer",
+                "leveldesigner": "level-designer",
+                "systemsdesigner": "systems-designer",
+                "gameplayprogrammer": "gameplay-programmer",
+                "engineprogrammer": "engine-programmer",
+                "aiprogrammer": "ai-programmer",
+                "uiprogrammer": "ui-programmer",
+                "unityspecialist": "unity-specialist",
+                "artdirector": "art-director",
+                "sounddesigner": "sound-designer",
+                "technicalartist": "technical-artist",
+                "narrativedirector": "narrative-director",
+                "writer": "writer",
+                "worldbuilder": "world-builder",
+                "qatester": "qa-tester",
+                "threejsdev": "threejs-dev",
+                "aiconsultant": "ai-consultant",
+                "emailwriter": "email-writer",
+                "assetapprover": "asset-approver",
+                "meshy": "meshy"
+            }
+        }
+    },
+    "session": {
+        "dm_scope": "per-channel-peer"
+    },
+    "gateway": {
+        "port": 3002,
+        "host": "0.0.0.0",
+        "auth": {
+            "token": "yeticlaw"
+        }
+    }
+}

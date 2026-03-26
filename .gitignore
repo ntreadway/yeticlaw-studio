@@ -1,0 +1,22 @@
+# Private business materials — never commit
+yeticlaw-private/
+*-private/
+MARKETING.md
+*.private.md
+private/
+
+# Agent session state — auto-created by Picoclaw
+agents/
+
+# Secrets
+.env
+*.key
+*.pem
+config.local.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
