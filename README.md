@@ -150,14 +150,14 @@ The installer handles: llama.cpp build with KleidiAI optimizations, Qwen3.5 4B Q
 From your computer:
 ```bash
 # Download and extract this repo
-tar -xzf yeticlaw-agents.tar.gz
+tar -xzf yeticlaw-studio.tar.gz
 
 # Copy to the Pi
-scp -r yeticlaw-agents/ orangepi@[your_ip]:/tmp/
+scp -r yeticlaw-studio/ orangepi@[your_ip]:/tmp/
 
 # SSH in and deploy
 ssh orangepi@[your_ip]
-sudo bash /tmp/yeticlaw-agents/deploy.sh
+sudo bash /tmp/yeticlaw-studio/deploy.sh
 ```
 
 The deploy script will:

@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 # ============================================================================
-# YetiClaw Studio Agents — Deploy Script v2
-# 23 agents: game studio + Three.js/VIVERSE + AI consulting + avatar clothing
-#
+# YetiClaw Studio Agents — Deploy Script
 # Usage (run on the Orange Pi as root or with sudo):
 #   sudo bash deploy.sh
 #
 # Or from your machine:
-#   scp -r yeticlaw-agents/ orangepi@yeticlaw.local:/tmp/
-#   ssh orangepi@yeticlaw.local "sudo bash /tmp/yeticlaw-agents/deploy.sh"
+#   scp -r yeticlaw-studio/ orangepi@yeticlaw.local:/tmp/
+#   ssh orangepi@yeticlaw.local "sudo bash /tmp/yeticlaw-studio/deploy.sh"
 # ============================================================================
 set -euo pipefail
 
@@ -24,7 +22,7 @@ err()  { echo -e "${RED}[deploy]${NC} $1"; exit 1; }
 
 [[ $EUID -eq 0 ]] || err "Run as root: sudo bash deploy.sh"
 
-# rclone
+# ── rclone ────────────────────────────────────────────────────────────────────
 log "Checking rclone..."
 if ! command -v rclone &>/dev/null; then
     log "Installing rclone..."
@@ -39,24 +37,59 @@ if ! rclone listremotes 2>/dev/null | grep -q "^gdrive:"; then
     warn "(Name the remote 'gdrive', type: drive, follow OAuth)"
 else
     log "gdrive remote found — creating folder structure..."
-    for folder in threejs outreach avatar-clothing gamedev; do
+    for folder in threejs outreach gamedev meshy-models asset-spend; do
         rclone mkdir "gdrive:YetiClaw/$folder" 2>/dev/null || true
     done
     log "Drive folders ready ✓"
 fi
 
-# Backup
-[ -f "$HOME_CONFIG/config.json" ] && \
-    cp "$HOME_CONFIG/config.json" "$HOME_CONFIG/config.json.bak.$(date +%Y%m%d%H%M%S)" && \
+# ── Backup and preserve existing credentials ──────────────────────────────────
+if [ -f "$HOME_CONFIG/config.json" ]; then
+    cp "$HOME_CONFIG/config.json" "$HOME_CONFIG/config.json.bak.$(date +%Y%m%d%H%M%S)"
     log "Config backed up"
 
-# Skills
+    EXISTING_TOKEN=$(python3 -c "
+import json
+try:
+    cfg = json.load(open('$HOME_CONFIG/config.json'))
+    print(cfg.get('channels', {}).get('telegram', {}).get('token', ''))
+except: print('')
+" 2>/dev/null || echo "")
+
+    EXISTING_ALLOW_FROM=$(python3 -c "
+import json
+try:
+    cfg = json.load(open('$HOME_CONFIG/config.json'))
+    af = cfg.get('channels', {}).get('telegram', {}).get('allow_from', [])
+    print(json.dumps(af))
+except: print('[]')
+" 2>/dev/null || echo "[]")
+
+    EXISTING_GEMINI=$(python3 -c "
+import json
+try:
+    cfg = json.load(open('$HOME_CONFIG/config.json'))
+    for m in cfg.get('model_list', []):
+        if m.get('model_name') == 'nano-banana-2':
+            print(m.get('api_key', ''))
+except: print('')
+" 2>/dev/null || echo "")
+else
+    EXISTING_TOKEN=""
+    EXISTING_ALLOW_FROM="[]"
+    EXISTING_GEMINI=""
+fi
+
+# ── Skills ────────────────────────────────────────────────────────────────────
+# Note: avatar-clothing and full email-writer are in yeticlaw-private/
+# Run deploy-private.sh after this to install them
 AGENTS="creative-director technical-director producer \
         game-designer level-designer systems-designer \
         gameplay-programmer engine-programmer ai-programmer ui-programmer unity-specialist \
         art-director sound-designer technical-artist \
         narrative-director writer world-builder qa-tester \
-        threejs-dev ai-consultant email-writer avatar-clothing asset-approver meshy"
+        threejs-dev ai-consultant email-writer \
+        asset-approver meshy"
 
 log "Installing skill files..."
 for agent in $AGENTS; do
@@ -68,36 +101,59 @@ for agent in $AGENTS; do
     log "  ✓ $agent"
 done
 
-# AGENTS.md
+# AGENTS.md reference doc
 cp "$SCRIPT_DIR/AGENTS.md" "$WORKSPACE/AGENTS.md"
 log "AGENTS.md installed ✓"
 
-# Session dirs
-log "Creating session directories..."
-for agent in $AGENTS; do
-    mkdir -p "$CONFIG_DIR/agents/$agent/agent"
-    mkdir -p "$CONFIG_DIR/agents/$agent/sessions"
-    [ -f "$CONFIG_DIR/agents/$agent/sessions/sessions.json" ] || echo '{}' > "$CONFIG_DIR/agents/$agent/sessions/sessions.json"
-done
-
-# Config
+# ── Config ────────────────────────────────────────────────────────────────────
 log "Installing config.json..."
 mkdir -p "$HOME_CONFIG"
 cp "$SCRIPT_DIR/config.json" "$HOME_CONFIG/config.json"
-cp "$SCRIPT_DIR/config.json" "$CONFIG_DIR/config.json"
 
-# Permissions
+# Patch back preserved credentials so redeploy doesn't wipe them
+python3 << PYEOF
+import json
+
+with open('$HOME_CONFIG/config.json', 'r') as f:
+    cfg = json.load(f)
+
+existing_token = '''$EXISTING_TOKEN'''.strip()
+existing_allow_from = json.loads('''$EXISTING_ALLOW_FROM''')
+existing_gemini = '''$EXISTING_GEMINI'''.strip()
+
+if existing_token:
+    cfg['channels']['telegram']['token'] = existing_token
+    print("  Telegram token preserved ✓")
+
+if existing_allow_from:
+    cfg['channels']['telegram']['allow_from'] = existing_allow_from
+    print("  Telegram allow_from preserved ✓")
+
+if existing_gemini and existing_gemini not in ('', 'YOUR_GEMINI_API_KEY'):
+    for m in cfg.get('model_list', []):
+        if m.get('model_name') == 'nano-banana-2':
+            m['api_key'] = existing_gemini
+    print("  Gemini API key preserved ✓")
+
+with open('$HOME_CONFIG/config.json', 'w') as f:
+    json.dump(cfg, f, indent=4)
+PYEOF
+
+cp "$HOME_CONFIG/config.json" "$CONFIG_DIR/config.json"
+
+# ── Permissions ───────────────────────────────────────────────────────────────
 chown -R orangepi:orangepi "$WORKSPACE" "$HOME_CONFIG" "$CONFIG_DIR" 2>/dev/null || true
 
-# Restart
+# ── Restart ───────────────────────────────────────────────────────────────────
 log "Restarting yeticlaw-gateway..."
 systemctl restart yeticlaw-gateway
 sleep 3
 systemctl is-active --quiet yeticlaw-gateway && log "Gateway running ✓" || warn "Check: journalctl -u yeticlaw-gateway -f"
 
+# ── Summary ───────────────────────────────────────────────────────────────────
 echo ""
 echo -e "${GREEN}============================================${NC}"
-echo -e "${GREEN}   YetiClaw Studio — 23 Agents Deployed    ${NC}"
+echo -e "${GREEN}      YetiClaw Studio — Agents Deployed     ${NC}"
 echo -e "${GREEN}============================================${NC}"
 echo ""
 echo "  /creativedirector  /technicaldirector  /producer"
@@ -106,9 +162,52 @@ echo "  /gameplayprogrammer  /engineprogrammer  /aiprogrammer"
 echo "  /uiprogrammer  /unityspecialist"
 echo "  /artdirector  /sounddesigner  /technicalartist"
 echo "  /narrativedirector  /writer  /worldbuilder  /qatester"
-echo "  /threejsdev"
-echo "  /emailwriter  /aiconsultant  /avatarclothing"
+echo "  /threejsdev  /emailwriter  /aiconsultant"
+echo "  /assetapprover  /meshy"
 echo ""
-echo -e "${YELLOW}  If gdrive not set up yet:${NC} su - orangepi -c 'rclone config'"
-echo -e "${YELLOW}  Set Telegram token:${NC} edit $HOME_CONFIG/config.json"
+
+# Check what still needs setting
+TOKEN=$(python3 -c "
+import json
+try:
+    cfg = json.load(open('$HOME_CONFIG/config.json'))
+    print(cfg['channels']['telegram'].get('token',''))
+except: print('')
+" 2>/dev/null || echo "")
+
+GEMINI=$(python3 -c "
+import json
+try:
+    cfg = json.load(open('$HOME_CONFIG/config.json'))
+    [print(m.get('api_key','')) for m in cfg.get('model_list',[]) if m.get('model_name')=='nano-banana-2']
+except: print('')
+" 2>/dev/null || echo "")
+
+echo -e "${YELLOW}  Next steps:${NC}"
+
+if [ -z "$TOKEN" ] || [ "$TOKEN" = "YOUR_TELEGRAM_BOT_TOKEN" ]; then
+    echo "  ⚠  Set Telegram token:"
+    echo "     nano $HOME_CONFIG/config.json"
+    echo "     → channels.telegram.token"
+    echo "     → channels.telegram.allow_from"
+    echo ""
+fi
+
+if [ -z "$GEMINI" ] || [ "$GEMINI" = "YOUR_GEMINI_API_KEY" ]; then
+    echo "  ⚠  Set Gemini API key (for art-director and avatar-clothing):"
+    echo "     nano $HOME_CONFIG/config.json"
+    echo "     → model_list[nano-banana-2].api_key"
+    echo "     Get key: https://aistudio.google.com/apikey"
+    echo ""
+fi
+
+echo "  Run private skills overlay (Yeti Games internal):"
+echo "    sudo bash yeticlaw-private/deploy-private.sh"
+echo ""
+echo "  Set up Google Drive and Gmail (once):"
+echo "    See README.md — Step 5"
+echo "    Then: nano $HOME_CONFIG/config.json"
+echo "    → tools.mcp.servers.gdrive.enabled = true"
+echo "    → tools.mcp.servers.gmail.enabled = true"
+echo "    → sudo systemctl restart yeticlaw-gateway"
 echo ""
