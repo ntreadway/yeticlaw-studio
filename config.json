@@ -144,6 +144,21 @@
                 "wget -q *meshy* -O /tmp/*",
                 "jq *"
             ]
+        },
+        "mcp": {
+            "enabled": true,
+            "servers": {
+                "gdrive": {
+                    "enabled": true,
+                    "command": "npx",
+                    "args": ["-y", "@piotr-agier/google-drive-mcp"]
+                },
+                "gmail": {
+                    "enabled": true,
+                    "command": "npx",
+                    "args": ["-y", "@gongrzhe/server-gmail-autoauth-mcp"]
+                }
+            }
         }
     },
     "channels": {

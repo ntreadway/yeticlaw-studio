@@ -1,4 +1,5 @@
 # YetiClaw Game Studio Agents
+#### By Yeti Games, LLC
 
 > 25 specialized AI agents for game development, AI consulting, avatar creation, and business outreach — running privately on your own hardware via Picoclaw and Qwen3.5 4B.
 
@@ -79,12 +80,6 @@ A complete Picoclaw skill pack that turns your private hardware into a full AI s
 | Command | Role |
 |---|---|
 | `/emailwriter` | Outreach for game dev · AI integration · AI app dev |
-| `/aiconsultant` | Find AI integration leads, profile companies, pitch angles |
-
-### 👗 Avatar
-| Command | Role |
-|---|---|
-| `/avatarclothing` | Meta Horizon avatar clothing — paste Gemini UV description → texture spec + Blender script |
 
 ### 💰 Asset Generation (approval required before any paid API fires)
 | Command | Role |
@@ -140,7 +135,7 @@ A complete Picoclaw skill pack that turns your private hardware into a full AI s
 ### 🍊 Orange Pi 6 Plus
 
 #### Step 1 — Run the YetiClaw base installer
-
+#### This step is not included in the repo, contact me for installation services
 This sets up llama.cpp, downloads the model, and installs Picoclaw:
 
 ```bash
@@ -158,10 +153,10 @@ From your computer:
 tar -xzf yeticlaw-agents.tar.gz
 
 # Copy to the Pi
-scp -r yeticlaw-agents/ orangepi@yeticlaw.local:/tmp/
+scp -r yeticlaw-agents/ orangepi@[your_ip]:/tmp/
 
 # SSH in and deploy
-ssh orangepi@yeticlaw.local
+ssh orangepi@[your_ip]
 sudo bash /tmp/yeticlaw-agents/deploy.sh
 ```
 
@@ -196,25 +191,30 @@ sudo systemctl restart yeticlaw-gateway
 ```
 
 #### Step 5 — Set up Google Drive and Gmail MCP servers (optional)
-
 ```bash
 # Install Node.js
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
 sudo apt-get install -y nodejs
 
-# Authenticate Google Drive (opens a browser URL — complete OAuth on your computer)
+# Authenticate Google Drive
+# This prints a URL — open it in a browser on any machine, complete OAuth, paste the code back
+su - orangepi
 npx @piotr-agier/google-drive-mcp auth
 
-# Authenticate Gmail
+# Authenticate Gmail (same process)
 npx @gongrzhe/server-gmail-autoauth-mcp auth
+
+# Exit back to root when done
+exit
 ```
 
-Add the MCP servers to `~/.picoclaw/config.json` under `tools.mcp.servers` (see `config.json` in this repo for the full block).
+The MCP block is already included in `config.json` — nothing extra to add.
+To disable Drive or Gmail, set `"enabled": false` for that server in `~/.picoclaw/config.json`.
 
 ---
 
 ### 🍎 macOS
-
+### Contact me for installation services
 #### Step 1 — Install dependencies
 
 ```bash
@@ -304,12 +304,15 @@ rclone config
 #### Step 8 — Set up Google Drive and Gmail MCP servers (optional)
 
 ```bash
-# Authenticate Google Drive
+# Opens a browser automatically on Mac — complete OAuth, token saved locally
 npx @piotr-agier/google-drive-mcp auth
 
-# Authenticate Gmail
+# Authenticate Gmail (same process)
 npx @gongrzhe/server-gmail-autoauth-mcp auth
 ```
+
+The MCP block is already included in `config.json` — nothing extra to add.
+To disable Drive or Gmail, set `"enabled": false` for that server in `~/.picoclaw/config.json`.
 
 #### Step 9 — Start the gateway
 
