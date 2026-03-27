@@ -17,7 +17,15 @@
                 "max_args_length": 300
             },
             "summarize_message_threshold": 10,
-            "summarize_token_percent": 75
+            "summarize_token_percent": 75,
+            "request_timeout": 300,
+            "subturn": {
+                "max_depth": 2,
+                "max_concurrent": 1,
+                "default_timeout_minutes": 5,
+                "default_token_budget": 4096,
+                "concurrency_timeout_sec": 30
+            }
         }
     },
     "model_list": [
