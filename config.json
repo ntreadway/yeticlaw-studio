@@ -11,11 +11,13 @@
             "allow_read_outside_workspace": false,
             "max_tokens": 32768,
             "temperature": 0.7,
-            "max_tool_iterations": 5,
+            "max_tool_iterations": 10,
             "tool_feedback": {
                 "enabled": true,
                 "max_args_length": 300
-            }
+            },
+            "summarize_message_threshold": 10,
+            "summarize_token_percent": 75
         }
     },
     "model_list": [
@@ -111,6 +113,9 @@
                     ]
                 }
             }
+        },
+        "tool_feedback": {
+            "enabled": false
         }
     },
     "heartbeat": {
