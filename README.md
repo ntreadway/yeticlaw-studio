@@ -40,10 +40,9 @@ The producer is the entry point for any new game project. Give it your full crea
 Just tell the producer what you want. No need to simplify or break it into steps:
 
 ```
-/producer write a brief for a Three.js 2D magic potion making game for VIVERSE.
-Mobile and desktop controls. Young wizard named Zeal using dark magic to make the
-Philosopher's Stone. Hermetic magic undertones. Appearance changes as he drinks
-potions. Pixel art, light horror, 13+.
+/producer write a brief for a Pac-Man style arcade game for VIVERSE.
+Browser-based, mobile and desktop controls. Classic maze gameplay with modern
+twists, power-ups, and online leaderboards. Pixel art style, all ages.
 ```
 
 The producer reads your full vision and writes the brief immediately — no spawning, no waiting. You get back a structured document with game name, concept, mechanics, visual style, platform, timeline, and budget.
@@ -75,9 +74,9 @@ Each expansion spawns ONE specialist agent focused on that section only.
 With the brief saved, any agent can read it directly:
 
 ```
-/threejsdev scaffold the project structure for Zeal's Dark Alchemy
-/gamedesigner design the potion brewing minigame
-/narrativedirector write Zeal's character arc
+/threejsdev scaffold the project structure for the Pac-Man game
+/gamedesigner design the power-up system
+/narrativedirector write the game's story and character bios
 ```
 
 ---
@@ -373,3 +372,37 @@ yeticlaw-studio/
 MIT — see [LICENSE](./LICENSE)
 
 Skills are compatible with both Picoclaw and OpenClaw SKILL.md format.
+
+---
+
+## Unity MCP (Mac Mini only)
+
+On a Mac Mini with Unity Editor installed, you can connect Picoclaw directly to Unity via MCP. This enables agents to write C# scripts directly into your Unity project, trigger compilation, read console errors, and fix them automatically.
+
+### Setup
+
+1. Install Unity 6+ with the MCP package from the Package Manager
+2. Enable the Unity MCP server in `~/.picoclaw/config.json`:
+
+```json
+"unity": {
+    "enabled": true,
+    "command": "npx",
+    "args": ["-y", "@unity/mcp-server"]
+}
+```
+
+3. Open your Unity project before starting the gateway
+
+### What this enables
+
+```
+/gameplayprogrammer implement the ghost AI behaviour
+→ writes PlayerBrewing.cs directly into Unity via MCP
+→ triggers compile
+→ reads console errors
+→ fixes errors automatically
+→ "✅ PlayerBrewing.cs compiled successfully, no errors"
+```
+
+No copy-paste required. The agent writes, compiles, and debugs in a live Unity session.
