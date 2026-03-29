@@ -51,7 +51,9 @@ MODEL_URL=$(curl -s "https://api.meshy.ai/openapi/v2/text-to-3d/$TASK_ID" \
 wget -q "$MODEL_URL" -O "/tmp/[NAME].glb"
 
 # Step 4 — Save to Google Drive
-rclone copy "/tmp/[NAME].glb" "gdrive:YetiClaw/meshy-models/"
+mkdir -p "/opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/models/"
+cp "/tmp/[NAME].glb" "/opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/models/[NAME].glb"
+rclone copy "/opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/models/[NAME].glb" "gdrive:YetiClaw/gamedev/[slug]/assets/models/"
 ```
 
 ## Image to 3D Workflow
@@ -71,7 +73,8 @@ After successful generation, report:
 Name: [asset name]
 Task ID: [id]
 Credits used: ~20
-File: gdrive:YetiClaw/meshy-models/[name].glb
+File: projects/[slug]/assets/models/[name].glb
+Drive: gdrive:YetiClaw/gamedev/[slug]/assets/models/[name].glb
 Ready to integrate into: [project name]
 ```
 
@@ -86,3 +89,12 @@ Ready to integrate into: [project name]
 Invoked via: /meshy [task]
 Example: /meshy generate a low-poly treasure chest, 2000 tris, game-ready GLB
 (Note: this should only be called after /assetapprover has approved the request)
+
+## WHAT'S NEXT
+After generating assets, always end with:
+
+"**What's next?**
+1. `/technicalartist` — optimize and integrate the GLB
+2. `/threejsdev` — place the asset in the scene
+3. `/artdirector` — review against the style guide
+4. `save` — save asset log to Drive"

@@ -95,3 +95,11 @@ Examples:
   /emailwriter find Unity indie studios in LA hiring contractors
   /emailwriter cold outreach to a real estate company for AI agent integration
   /emailwriter write a follow-up to an AI app dev lead
+
+## WHAT'S NEXT
+After drafting the email, always end with:
+
+"**What's next?**
+1. Send it and I'll draft a follow-up sequence
+2. `/aiconsultant` — research this prospect further
+3. `save` — save to Drive"

@@ -89,7 +89,8 @@ AGENTS="creative-director technical-director producer \
         art-director sound-designer technical-artist \
         narrative-director writer world-builder qa-tester \
         threejs-dev ai-consultant email-writer \
-        asset-approver meshy"
+        asset-approver meshy \
+        game-namer concept-writer mechanics-designer style-writer"
 
 log "Installing skill files..."
 for agent in $AGENTS; do
@@ -103,6 +104,9 @@ done
 
 # AGENTS.md reference doc
 cp "$SCRIPT_DIR/AGENTS.md" "$WORKSPACE/AGENTS.md"
+cp "$SCRIPT_DIR/PROJECTS.md" "$WORKSPACE/PROJECTS.md" 2>/dev/null || true
+cp "$SCRIPT_DIR/SOUL.md" "$WORKSPACE/SOUL.md" 2>/dev/null || true 2>/dev/null || true
+mkdir -p "$WORKSPACE/projects"
 log "AGENTS.md installed ✓"
 
 # ── Config ────────────────────────────────────────────────────────────────────

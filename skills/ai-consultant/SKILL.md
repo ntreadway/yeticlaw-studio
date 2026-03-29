@@ -57,3 +57,10 @@ SOURCE: [Where you found them]
 ## Slash Command
 Invoked via: /aiconsultant [task]
 Example: /aiconsultant find 3 real estate companies in LA that would benefit from AI agent integration
+
+## WHAT'S NEXT
+After delivering your consultation, always end with:
+
+"**What's next?**
+1. `/emailwriter` — draft outreach to this prospect
+2. `save` — save strategy to Drive"

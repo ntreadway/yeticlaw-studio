@@ -1,10 +1,10 @@
 # YetiClaw Game Studio Agents
 #### By Yeti Games, LLC
 
-> 25 specialized AI agents for game development, AI consulting, avatar creation, and business outreach — running privately on your own hardware via Picoclaw and Qwen3.5 4B.
+> 27 specialized AI agents for game development, AI consulting, avatar creation, and business outreach — running privately on your own hardware via Picoclaw and Qwen3.5 4B.
 
-[![25 Agents](https://img.shields.io/badge/agents-25-blueviolet)](./skills)
-[![24 Skills](https://img.shields.io/badge/skills-24-green)](./skills)
+[![27 Agents](https://img.shields.io/badge/agents-27-blueviolet)](./skills)
+[![27 Skills](https://img.shields.io/badge/skills-27-green)](./skills)
 [![Picoclaw](https://img.shields.io/badge/runtime-Picoclaw-orange)](https://picoclaw.io)
 [![Qwen3.5 4B](https://img.shields.io/badge/model-Qwen3.5%204B-blue)](https://ollama.com/library/qwen3.5)
 [![ClaWHub Compatible](https://img.shields.io/badge/clawhub-compatible-red)](https://clawhub.ai)
@@ -22,12 +22,63 @@
 
 ## What Is This?
 
-A complete Picoclaw skill pack that turns your private hardware into a full AI studio. Core workflows run entirely locally — no cloud subscription required for day-to-day use. Optional paid APIs (Nano Banana 2, Meshy) are gated behind a human approval step so you stay in control of spend.
+A complete Picoclaw skill pack that turns your private hardware into a full AI game studio. Core workflows run entirely locally — no cloud subscription required for day-to-day use. Optional paid APIs (Nano Banana 2, Meshy) are gated behind a human approval step so you stay in control of spend.
 
 **Works on:**
 - 🍊 Orange Pi 6 Plus (ARM64) — the original YetiClaw setup
 - 🍎 macOS (Apple Silicon or Intel)
 - 🐧 Any Linux x86_64 or ARM64 machine
+
+---
+
+## Creator Workflow — Brief to Build
+
+The producer is the entry point for any new game project. Give it your full creative vision — story, art style, platform, mechanics, everything — and it writes a structured brief directly, then offers to expand any section with a specialist.
+
+### Step 1 — Brief creation
+
+Just tell the producer what you want. No need to simplify or break it into steps:
+
+```
+/producer write a brief for a Three.js 2D magic potion making game for VIVERSE.
+Mobile and desktop controls. Young wizard named Zeal using dark magic to make the
+Philosopher's Stone. Hermetic magic undertones. Appearance changes as he drinks
+potions. Pixel art, light horror, 13+.
+```
+
+The producer reads your full vision and writes the brief immediately — no spawning, no waiting. You get back a structured document with game name, concept, mechanics, visual style, platform, timeline, and budget.
+
+### Step 2 — Save the brief
+
+```
+save
+```
+
+Saves to `projects/[slug]/brief.md` in workspace and syncs to Google Drive.
+
+### Step 3 — Expand sections with specialists
+
+Once the brief exists, expand any section one at a time:
+
+```
+expand mechanics
+expand narrative
+expand three.js
+expand levels
+expand art
+```
+
+Each expansion spawns ONE specialist agent focused on that section only.
+
+### Step 4 — Hand off to specialists
+
+With the brief saved, any agent can read it directly:
+
+```
+/threejsdev scaffold the project structure for Zeal's Dark Alchemy
+/gamedesigner design the potion brewing minigame
+/narrativedirector write Zeal's character arc
+```
 
 ---
 
@@ -38,7 +89,7 @@ A complete Picoclaw skill pack that turns your private hardware into a full AI s
 |---|---|
 | `/creativedirector` | Creative vision, tone, aesthetic, MDA review |
 | `/technicaldirector` | Unity/Three.js architecture decisions (code-gen) |
-| `/producer` | Sprint planning, milestones, blockers |
+| `/producer` | **Game brief creation** + sprint planning, milestones, blockers |
 
 ### 🎮 Game Design
 | Command | Role |
@@ -74,12 +125,13 @@ A complete Picoclaw skill pack that turns your private hardware into a full AI s
 ### 🌐 Web & XR
 | Command | Role |
 |---|---|
-| `/threejsdev` | TypeScript Three.js games for VIVERSE (WebGL/WebXR) — orchestrates asset pipeline |
+| `/threejsdev` | TypeScript Three.js games for VIVERSE (WebGL/WebXR) |
 
 ### 💼 Business
 | Command | Role |
 |---|---|
 | `/emailwriter` | Outreach for game dev · AI integration · AI app dev |
+| `/aiconsultant` | AI strategy and consulting for studios and SMBs |
 
 ### 💰 Asset Generation (approval required before any paid API fires)
 | Command | Role |
@@ -101,11 +153,9 @@ A complete Picoclaw skill pack that turns your private hardware into a full AI s
                     ✗ deny   → placeholder used, no spend
 ```
 
-**Nano Banana 2** (`gemini-3.1-flash-image-preview`) handles both:
-- Image **generation** — concept art, textures, UI assets
-- Image **understanding** — reads UV maps and clothing photos
+**Nano Banana 2** (`gemini-3.1-flash-image-preview`) handles image generation and understanding.
 
-**Meshy** — text-to-3D and image-to-3D, GLB output saved to Google Drive
+**Meshy** — text-to-3D and image-to-3D, GLB output saved to Google Drive.
 
 ---
 
@@ -114,19 +164,17 @@ A complete Picoclaw skill pack that turns your private hardware into a full AI s
 ### All platforms
 - A [Telegram bot token](https://t.me/BotFather)
 - A [Gemini API key](https://aistudio.google.com/apikey) (for Nano Banana 2)
-- A [Meshy API key](https://www.meshy.ai/api) (for 3D model generation, Pro plan required)
-- [rclone](https://rclone.org) configured with a `gdrive` remote (for Google Drive saves)
+- A [Meshy API key](https://www.meshy.ai/api) (for 3D generation, Pro plan required)
+- [rclone](https://rclone.org) configured with a `gdrive` remote
 - [Node.js 20+](https://nodejs.org) (for Google Drive and Gmail MCP servers)
 
 ### Orange Pi 6 Plus only
-- Debian 13 (Trixie) or Ubuntu 24.04
-- 16GB RAM minimum
-- Your HuggingFace token (`HF_TOKEN`) for model download
+- Ubuntu 24.04, 16GB RAM minimum
+- Custom Picoclaw binary with 600s timeout fix (see below)
 
 ### macOS only
-- [Ollama](https://ollama.com) — serves Qwen3.5 locally (easier than raw llama.cpp on Mac)
-- Homebrew (for rclone, Node.js, jq)
-- Apple Silicon (M1/M2/M3/M4) recommended — Intel works but will be slower
+- [Ollama](https://ollama.com) — serves Qwen3.5 locally
+- Apple Silicon recommended
 
 ---
 
@@ -134,353 +182,134 @@ A complete Picoclaw skill pack that turns your private hardware into a full AI s
 
 ### 🍊 Orange Pi 6 Plus
 
-#### Step 1 — Run the YetiClaw base installer
-#### This step is not included in the repo, contact me for installation services
-This sets up llama.cpp, downloads the model, and installs Picoclaw:
+> **Note:** The base installer (llama.cpp, model download, Picoclaw, systemd services) is not included in this repo. Contact me for installation services.
+
+#### Step 1 — Deploy the agents
 
 ```bash
-# On the Pi as root
-sudo HF_TOKEN=hf_your_token_here bash install.sh
-```
-
-The installer handles: llama.cpp build with KleidiAI optimizations, Qwen3.5 4B Q4_K_M download, Picoclaw install, systemd services, firewall, and mDNS.
-
-#### Step 2 — Copy and run the agent deploy script
-
-From your computer:
-```bash
-# Download and extract this repo
 tar -xzf yeticlaw-studio.tar.gz
-
-# Copy to the Pi
 scp -r yeticlaw-studio/ orangepi@[your_ip]:/tmp/
-
-# SSH in and deploy
 ssh orangepi@[your_ip]
 sudo bash /tmp/yeticlaw-studio/deploy.sh
 ```
 
-The deploy script will:
-- Install rclone if missing
-- Copy all 24 skill files to `/opt/yeticlaw/openclaw/workspace/skills/`
-- Create all agent session directories
-- Install `config.json` to `~/.picoclaw/config.json`
-- Restart `yeticlaw-gateway`
-
-#### Step 3 — Set up Google Drive (first time only)
+#### Step 2 — Configure secrets
 
 ```bash
-# As orangepi (not root)
-su - orangepi
-rclone config
-# Choose: n (new remote) → name it gdrive → type: drive → follow OAuth prompts
+nano ~/.picoclaw/.security.yml
 ```
 
-#### Step 4 — Add API keys
+```yaml
+channels:
+  telegram:
+    token: YOUR_TELEGRAM_BOT_TOKEN
+model_list:
+  nano-banana-2:
+    api_key: YOUR_GEMINI_API_KEY
+skills: {}
+web: {}
+```
 
 ```bash
-# Edit ~/.picoclaw/config.json
-# Replace YOUR_GEMINI_API_KEY with your key from aistudio.google.com/apikey
+chmod 600 ~/.picoclaw/.security.yml
+```
 
-# Add Meshy key to environment
-echo 'export MESHY_API_KEY="your_meshy_key_here"' >> /home/orangepi/.bashrc
-source /home/orangepi/.bashrc
+Also set `channels.telegram.token` in `config.json` for compatibility.
 
-# Restart gateway to pick up config changes
+#### Step 3 — Add Meshy key
+
+```bash
+sudo nano /etc/environment
+# Add: MESHY_API_KEY=your_meshy_key_here
 sudo systemctl restart yeticlaw-gateway
 ```
 
-#### Step 5 — Set up Google Drive and Gmail MCP servers (optional)
+#### Step 4 — Set up Google Drive
+
 ```bash
-# Install Node.js
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
-sudo apt-get install -y nodejs
-
-# Authenticate Google Drive
-# This prints a URL — open it in a browser on any machine, complete OAuth, paste the code back
 su - orangepi
+rclone config  # n → gdrive → drive → follow OAuth
 npx @piotr-agier/google-drive-mcp auth
-
-# Authenticate Gmail (same process)
 npx @gongrzhe/server-gmail-autoauth-mcp auth
-
-# Exit back to root when done
-exit
 ```
-
-The MCP block is already included in `config.json` — nothing extra to add.
-To disable Drive or Gmail, set `"enabled": false` for that server in `~/.picoclaw/config.json`.
 
 ---
 
 ### 🍎 macOS
-### Contact me for installation services
-#### Step 1 — Install dependencies
 
 ```bash
-# Homebrew (if not already installed)
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Install tools
-brew install rclone jq node wget
-
-# Install Ollama (serves Qwen3.5 locally)
-brew install ollama
-```
-
-#### Step 2 — Download and start Qwen3.5
-
-```bash
-# Start the Ollama service
+brew install rclone jq node wget ollama
 brew services start ollama
-
-# Pull Qwen3.5 4B (multimodal — handles text + image)
 ollama pull qwen3.5:4b
 
-# Verify it's running
-ollama list
-```
-
-#### Step 3 — Install Picoclaw
-
-```bash
-# Apple Silicon
+# Install Picoclaw
 curl -L https://github.com/sipeed/picoclaw/releases/latest/download/picoclaw_Darwin_arm64.tar.gz | tar xz
 sudo mv picoclaw /usr/local/bin/
-
-# Intel Mac
-curl -L https://github.com/sipeed/picoclaw/releases/latest/download/picoclaw_Darwin_x86_64.tar.gz | tar xz
-sudo mv picoclaw /usr/local/bin/
-
-# Run onboarding to create default config
 picoclaw onboard
-```
 
-#### Step 4 — Deploy the agents
-
-```bash
-# Extract this repo
-tar -xzf yeticlaw-agents.tar.gz
-cd yeticlaw-agents
-
-# Run deploy (no sudo needed on Mac — paths adjust automatically)
+# Deploy agents
+tar -xzf yeticlaw-studio.tar.gz && cd yeticlaw-studio
 bash deploy-mac.sh
-```
 
-> **Note:** On macOS the deploy script installs skills to `~/.picoclaw/workspace/skills/` and config to `~/.picoclaw/config.json`. The Orange Pi deploy script targets `/opt/yeticlaw/` — they are different scripts.
-
-#### Step 5 — Update config.json for Ollama
-
-On macOS, Picoclaw connects to Ollama instead of a raw llama.cpp server. Edit `~/.picoclaw/config.json` and update the `model_list` entry:
-
-```json
-{
-    "model_name": "qwen3.5:4b",
-    "model": "openai/qwen3.5:4b",
-    "api_base": "http://127.0.0.1:11434/v1",
-    "api_key": "ollama",
-    "timeout": 120
-}
-```
-
-#### Step 6 — Add API keys
-
-```bash
-# Edit ~/.picoclaw/config.json
-# Replace YOUR_GEMINI_API_KEY with your key from aistudio.google.com/apikey
-
-# Add Meshy key
-echo 'export MESHY_API_KEY="your_meshy_key_here"' >> ~/.zshrc
-source ~/.zshrc
-```
-
-#### Step 7 — Set up Google Drive (first time only)
-
-```bash
-rclone config
-# Choose: n → name it gdrive → type: drive → follow OAuth prompts (browser opens automatically on Mac)
-```
-
-#### Step 8 — Set up Google Drive and Gmail MCP servers (optional)
-
-```bash
-# Opens a browser automatically on Mac — complete OAuth, token saved locally
-npx @piotr-agier/google-drive-mcp auth
-
-# Authenticate Gmail (same process)
-npx @gongrzhe/server-gmail-autoauth-mcp auth
-```
-
-The MCP block is already included in `config.json` — nothing extra to add.
-To disable Drive or Gmail, set `"enabled": false` for that server in `~/.picoclaw/config.json`.
-
-#### Step 9 — Start the gateway
-
-```bash
 picoclaw gateway
 ```
 
-To run as a background service on macOS:
-```bash
-# Create a LaunchAgent
-cat > ~/Library/LaunchAgents/io.picoclaw.gateway.plist << 'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>Label</key>
-    <string>io.picoclaw.gateway</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/usr/local/bin/picoclaw</string>
-        <string>gateway</string>
-    </array>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>KeepAlive</key>
-    <true/>
-    <key>StandardOutPath</key>
-    <string>/tmp/picoclaw.log</string>
-    <key>StandardErrorPath</key>
-    <string>/tmp/picoclaw-error.log</string>
-</dict>
-</plist>
-EOF
-
-launchctl load ~/Library/LaunchAgents/io.picoclaw.gateway.plist
-```
-
 ---
 
-## Configuration Reference
+## Important: Custom Binary Required (Orange Pi)
 
-### config.json structure
+The Orange Pi setup requires a **custom-built Picoclaw binary** with the HTTP timeout increased from 120s to 600s. The official binary cancels responses before the model finishes generating on slow hardware.
 
-```json
-{
-    "agents": {
-        "defaults": {
-            "model_name": "qwen3.5:4b",
-            "workspace": "/opt/yeticlaw/openclaw/workspace",
-            "max_history": 5,
-            "max_tool_iterations": 3,
-            "max_tokens": 8192,
-            "temperature": 0.7
-        },
-        "list": { ... }
-    },
-    "model_list": [
-        {
-            "model_name": "qwen3.5:4b",
-            "model": "openai/qwen3.5-4b-q4_k_m.gguf",
-            "api_base": "http://127.0.0.1:8080/v1",
-            "api_key": "none",
-            "timeout": 120
-        },
-        {
-            "model_name": "nano-banana-2",
-            "model": "gemini/gemini-3.1-flash-image-preview",
-            "api_key": "YOUR_GEMINI_API_KEY",
-            "timeout": 60
-        }
-    ],
-    "tools": {
-        "web": { "enabled": true, "duckduckgo": { "enabled": true, "max_results": 1 } },
-        "exec": {
-            "enabled": true,
-            "allowlist": ["rclone copy *", "rclone mkdir *", "rclone ls *", "curl -s https://api.meshy.ai/*", "jq *"]
-        },
-        "mcp": {
-            "enabled": true,
-            "servers": {
-                "gdrive": { "enabled": true, "command": "npx", "args": ["-y", "@piotr-agier/google-drive-mcp"] },
-                "gmail":  { "enabled": true, "command": "npx", "args": ["-y", "@gongrzhe/server-gmail-autoauth-mcp"] }
-            }
-        }
-    },
-    "channels": {
-        "telegram": {
-            "enabled": true,
-            "token": "YOUR_TELEGRAM_BOT_TOKEN",
-            "allow_from": ["YOUR_TELEGRAM_USER_ID"]
-        }
-    }
-}
-```
-
-### macOS workspace path
-
-On macOS, change `workspace` in `agents.defaults` to:
-```json
-"workspace": "/Users/YOUR_USERNAME/.picoclaw/workspace"
-```
-
-### Google Drive save paths
-
-| Agent | Drive Path |
-|---|---|
-| Three.js games | `gdrive:YetiClaw/threejs/` |
-| Outreach emails | `gdrive:YetiClaw/outreach/` |
-| Avatar clothing | `gdrive:YetiClaw/avatar-clothing/` |
-| Game design docs | `gdrive:YetiClaw/gamedev/` |
-| Meshy 3D models | `gdrive:YetiClaw/meshy-models/` |
-| Asset spend log | `gdrive:YetiClaw/asset-spend/` |
-
----
-
-## Verify It's Working
-
-Open Telegram and message your bot:
-
-```
-/gamedesigner design a simple coin collection mechanic
-```
-```
-/emailwriter find Unity indie studios in Los Angeles
-```
-```
-/threejsdev scaffold a first-person maze game for VIVERSE
-```
-```
-/assetapprover I need a 2048x2048 stone wall texture
-```
-
----
-
-## Avatar Clothing Workflow
-
-This agent uses Nano Banana 2's vision capability to read UV maps and clothing photos.
-
-1. Send your UV map + clothing photo to **Gemini** (your existing workflow)
-2. Copy Gemini's description of the UV layout and clothing regions
-3. In Telegram: `/avatarclothing [paste Gemini description here]`
-4. Agent produces:
-   - Texture paint spec (region by region)
-   - Blender Python bake setup script
-   - Meta Horizon upload checklist
-5. Files saved to `gdrive:YetiClaw/avatar-clothing/`
-
----
-
-## Publishing to ClaWHub
-
-All skills use Picoclaw-compatible YAML frontmatter and are ready to publish to [clawhub.ai](https://clawhub.ai).
+Build it on your Mac:
 
 ```bash
-# Install the ClaWHub CLI (on your computer)
-npm install -g clawhub
-
-# Log in with GitHub
-clawhub login
-
-# Publish all skills
-cd yeticlaw-agents/skills
-for skill in */; do
-    clawhub publish "$skill"
-done
+git clone --depth=1 https://github.com/sipeed/picoclaw.git
+cd picoclaw
+sed -i '' 's/const DefaultRequestTimeout = 120 \* time.Second/const DefaultRequestTimeout = 600 * time.Second/' pkg/providers/common/common.go
+GOOS=linux GOARCH=arm64 go build -tags "goolm,stdjson" -ldflags "-s -w" -o picoclaw-linux-arm64 ./cmd/picoclaw
+scp picoclaw-linux-arm64 orangepi@[your_ip]:/tmp/
+ssh orangepi@[your_ip]
+sudo cp /tmp/picoclaw-linux-arm64 /usr/local/bin/picoclaw && sudo chmod +x /usr/local/bin/picoclaw
 ```
 
-Each skill gets a page at `clawhub.ai/your-handle/skill-name`.
+On macOS with Ollama, the official binary works fine.
+
+---
+
+## Troubleshooting
+
+**Gateway exits silently after loading**
+Check `.security.yml` exists with correct token. Verify `config.json` has `"version": 1` (integer) and `channels.telegram.enabled: true`. Clean corrupt cron store:
+```bash
+echo '{"version":1,"jobs":[]}' > /opt/yeticlaw/openclaw/workspace/cron/jobs.json
+sudo systemctl restart yeticlaw-gateway
+```
+
+**Responses timing out (Orange Pi)**
+Install the custom binary with 600s timeout — see section above.
+
+**Skill not loading / description too long**
+Skill descriptions must be under 1024 characters. Check frontmatter:
+```bash
+head -4 /opt/yeticlaw/openclaw/workspace/skills/[skill-name]/SKILL.md
+```
+
+**llama-server SEGV on startup**
+Binary is corrupted. Rebuild from source:
+```bash
+sudo rm -rf /opt/llama.cpp
+sudo git clone --depth=1 https://github.com/ggml-org/llama.cpp /opt/llama.cpp
+sudo cmake -B /opt/llama.cpp/build /opt/llama.cpp -DGGML_NATIVE=OFF -DGGML_CPU_ARM_ARCH="armv9-a+sve+i8mm+dotprod" -DGGML_CPU_KLEIDIAI=ON -DCMAKE_BUILD_TYPE=Release
+sudo cmake --build /opt/llama.cpp/build --config Release -j$(nproc)
+sudo install -m 755 /opt/llama.cpp/build/bin/llama-server /usr/local/bin/
+sudo systemctl start llama-server
+```
+
+**rclone not syncing**
+```bash
+rclone ls gdrive:YetiClaw
+rclone config reconnect gdrive:
+```
 
 ---
 
@@ -489,96 +318,52 @@ Each skill gets a page at `clawhub.ai/your-handle/skill-name`.
 | Feature | Orange Pi 6 Plus | macOS |
 |---|---|---|
 | Model server | llama.cpp (KleidiAI optimized) | Ollama |
-| Model format | Q4_K_M GGUF | Ollama pull |
 | Speed | ~12 tok/s gen | ~40+ tok/s (M-series) |
-| Gateway service | systemd | LaunchAgent |
-| Deploy script | `deploy.sh` (requires sudo) | `deploy-mac.sh` (no sudo) |
+| Picoclaw binary | Custom build (600s timeout) | Official release |
+| Gateway service | systemd | LaunchAgent or foreground |
+| Deploy script | `deploy.sh` (sudo required) | `deploy-mac.sh` (no sudo) |
 | Workspace path | `/opt/yeticlaw/openclaw/workspace` | `~/.picoclaw/workspace` |
-| Config path | `~/.picoclaw/config.json` | `~/.picoclaw/config.json` |
-| Vulkan GPU | Disabled (shared LPDDR5) | Metal (via Ollama) |
-
----
-
-## Troubleshooting
-
-**Gateway not starting (Orange Pi)**
-```bash
-journalctl -u yeticlaw-gateway -f
-journalctl -u llama-server -f
-```
-
-**Gateway not starting (macOS)**
-```bash
-cat /tmp/picoclaw-error.log
-# Check Ollama is running
-ollama list
-```
-
-**Skill not loading / agent not responding to command**
-```bash
-# Check skill frontmatter is valid — name must match ^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$
-head -4 ~/.picoclaw/workspace/skills/game-designer/SKILL.md
-```
-
-**Meshy API failing**
-```bash
-# Check balance first
-curl -s https://api.meshy.ai/openapi/v1/credits \
-  -H "Authorization: Bearer $MESHY_API_KEY" | jq '.credits'
-```
-
-**rclone not syncing to Drive**
-```bash
-rclone ls gdrive:YetiClaw
-# If empty or error, re-authenticate:
-rclone config reconnect gdrive:
-```
-
-**n_predict cutting off responses (Orange Pi)**
-
-Increase `--n-predict` in the llama-server systemd service:
-```bash
-sudo nano /etc/systemd/system/llama-server.service
-# Change --n-predict 192 to --n-predict 512
-sudo systemctl daemon-reload && sudo systemctl restart llama-server
-```
 
 ---
 
 ## File Structure
 
 ```
-yeticlaw-agents/
+yeticlaw-studio/
 ├── README.md
 ├── AGENTS.md               ← Quick reference for all slash commands
-├── config.json             ← Picoclaw config (edit API keys before deploying)
+├── SOUL.md                 ← Workspace routing rules (loaded every message)
+├── config.json             ← Picoclaw config
 ├── deploy.sh               ← Orange Pi deploy script
 ├── deploy-mac.sh           ← macOS deploy script
 └── skills/
-    ├── creative-director/SKILL.md
-    ├── technical-director/SKILL.md
-    ├── producer/SKILL.md
-    ├── game-designer/SKILL.md
-    ├── level-designer/SKILL.md
-    ├── systems-designer/SKILL.md
-    ├── gameplay-programmer/SKILL.md
-    ├── engine-programmer/SKILL.md
-    ├── ai-programmer/SKILL.md
-    ├── ui-programmer/SKILL.md
-    ├── unity-specialist/SKILL.md
-    ├── art-director/SKILL.md
-    ├── sound-designer/SKILL.md
-    ├── technical-artist/SKILL.md
-    ├── narrative-director/SKILL.md
-    ├── writer/SKILL.md
-    ├── world-builder/SKILL.md
-    ├── qa-tester/SKILL.md
-    ├── threejs-dev/SKILL.md
-    ├── ai-consultant/SKILL.md
-    ├── email-writer/SKILL.md
-    ├── avatar-clothing/SKILL.md
-    ├── asset-approver/SKILL.md
-    └── meshy/SKILL.md
+    ├── producer/           ← Brief creation + sprint planning
+    ├── creative-director/
+    ├── technical-director/
+    ├── game-designer/
+    ├── level-designer/
+    ├── systems-designer/
+    ├── gameplay-programmer/
+    ├── engine-programmer/
+    ├── ai-programmer/
+    ├── ui-programmer/
+    ├── unity-specialist/
+    ├── art-director/
+    ├── sound-designer/
+    ├── technical-artist/
+    ├── narrative-director/
+    ├── writer/
+    ├── world-builder/
+    ├── qa-tester/
+    ├── threejs-dev/
+    ├── ai-consultant/
+    ├── email-writer/
+    ├── asset-approver/
+    ├── meshy/
+    ├── game-namer/         ← Atomic: generates game name options
+    ├── concept-writer/     ← Atomic: writes 2-sentence concept
+    ├── mechanics-designer/ ← Atomic: lists 5 core mechanics
+    └── style-writer/       ← Atomic: describes visual style
 ```
 
 ---

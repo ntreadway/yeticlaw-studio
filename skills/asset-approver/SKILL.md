@@ -76,3 +76,12 @@ Alert the user if:
 ## Slash Command
 Invoked via: /assetapprover [brief]
 Example: /assetapprover [paste asset brief from threejs-dev or art-director]
+
+## WHAT'S NEXT
+After approval or denial, always end with:
+
+"**What's next?**
+1. `/meshy` — generate approved 3D assets
+2. `/artdirector` — generate approved concept images
+3. `/threejsdev` — integrate approved assets into the project
+4. `save` — log this decision to Drive"
