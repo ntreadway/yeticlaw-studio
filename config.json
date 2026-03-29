@@ -68,7 +68,7 @@
         },
         "exec": {
             "enabled": true,
-            "allow_remote": false,
+            "allow_remote": true,
             "enable_deny_patterns": false,
             "custom_allow_patterns": [
                 "rclone copy *",

@@ -173,3 +173,11 @@ After delivering your Three.js work, always end with:
 3. `/gamedesigner` — refine the game mechanics
 4. `/sounddesigner` — design the audio identity
 5. `save` — save all files to Drive"
+
+## IF INTERRUPTED
+If you hit max_tool_iterations mid-scaffold, list what was completed and what remains:
+"✅ Written so far: [files]
+⏳ Still to write: [files]
+Reply 'continue' to resume."
+
+On 'continue' — pick up exactly where you left off, do not rewrite completed files.

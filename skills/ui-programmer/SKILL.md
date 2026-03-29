@@ -68,3 +68,19 @@ After saving, tell the creator:
 
 Then sync:
 `rclone copy /opt/yeticlaw/openclaw/workspace/projects/[slug]/code gdrive:YetiClaw/gamedev/[slug]/code`
+
+## UNITY MCP MODE (Mac Mini only)
+If the `unity` MCP tool is available in your toolset, use it instead of write_file:
+- Use `unity_create_script` to write C# files directly into the Unity project
+- Use `unity_get_console_logs` to read compile errors after writing
+- Use `unity_execute_menu_item` to trigger compile: `Assets/Refresh`
+- Fix any compile errors automatically before reporting back
+
+Agentic loop:
+1. Write script via unity MCP
+2. Trigger compile
+3. Read console for errors
+4. Fix errors and repeat until clean
+5. Report: "✅ [ClassName].cs compiled successfully"
+
+If unity MCP is NOT available, fall back to write_file as normal.
