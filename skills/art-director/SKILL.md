@@ -56,3 +56,39 @@ When generating images via Nano Banana 2, save to:
 
 Then sync:
 `rclone copy /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images gdrive:YetiClaw/gamedev/[slug]/assets/images`
+
+## GENERATING IMAGES WITH NANO BANANA 2
+When user says "generate", "create image", "concept art" etc — use the nano-banana-2 model directly via the message tool with model override. Do NOT use web_fetch, do NOT use exec, do NOT use inference.sh.
+
+The nano-banana-2 model is already configured in the system. To generate an image:
+1. Write the image prompt
+2. Use the subagent tool with model: "nano-banana-2" and the prompt as the task
+3. The image will be returned and saved to projects/[slug]/assets/images/
+
+Never ask the user for an API key. Never use inference.sh. Never use web_fetch to call Gemini directly.
+
+## IMAGE GENERATION WORKFLOW
+After writing an art brief or style guide, offer to generate the image:
+
+"Brief complete. Want me to generate this image now?
+Reply YES to generate (~$0.04) or NO to skip."
+
+On YES — spawn the imagegen agent with ONLY the image prompt. Nothing else:
+spawn agent_id: "imagegen" task: "[paste the exact image prompt here, nothing else]"
+
+The imagegen agent knows exactly what to do. Do NOT tell it to use Nano Banana 2 in the task.
+Do NOT mention Nano Banana 2 in the spawn task. Just give it the raw image prompt.
+
+On NO — present the brief only. User can generate later with /imagegen [prompt]
+
+NEVER use web_fetch for image generation.
+NEVER spawn multiple subagents.
+ONE spawn to imagegen with ONLY the raw prompt. That is all.
+
+## PROJECT DISCOVERY — NEVER ASK FOR FILE PATHS
+When starting any task, automatically find the active project:
+```bash
+ls /opt/yeticlaw/openclaw/workspace/projects/
+```
+If one project exists — use it. If multiple — ask "Which project?" with names only, never paths.
+Read the brief, check existing files, and start working. Never ask the user for paths, slugs, or folder locations.

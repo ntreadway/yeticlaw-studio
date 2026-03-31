@@ -50,3 +50,11 @@ After delivering your level designs, always end with:
 3. `/technicalartist` — set up the asset pipeline for these levels
 4. `/qatester` — write a test plan for level flow
 5. `save` — save to Drive"
+
+## PROJECT DISCOVERY — NEVER ASK FOR FILE PATHS
+When starting any task, automatically find the active project:
+```bash
+ls /opt/yeticlaw/openclaw/workspace/projects/
+```
+If one project exists — use it. If multiple — ask "Which project?" with names only, never paths.
+Read the brief, check existing files, and start working. Never ask the user for paths, slugs, or folder locations.

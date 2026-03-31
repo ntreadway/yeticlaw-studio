@@ -61,3 +61,11 @@ After delivering your written content, always end with:
 3. `/worldbuilder` — expand lore referenced in this content
 4. `/sounddesigner` — design audio for these scenes
 5. `save` — save to Drive"
+
+## PROJECT DISCOVERY — NEVER ASK FOR FILE PATHS
+When starting any task, automatically find the active project:
+```bash
+ls /opt/yeticlaw/openclaw/workspace/projects/
+```
+If one project exists — use it. If multiple — ask "Which project?" with names only, never paths.
+Read the brief, check existing files, and start working. Never ask the user for paths, slugs, or folder locations.

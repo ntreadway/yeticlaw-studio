@@ -181,3 +181,40 @@ If you hit max_tool_iterations mid-scaffold, list what was completed and what re
 Reply 'continue' to resume."
 
 On 'continue' — pick up exactly where you left off, do not rewrite completed files.
+
+
+## ASSET DISCOVERY
+When told a new asset is ready or to integrate assets — NEVER ask the user for file paths or frame counts.
+Instead run:
+```bash
+ls /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/
+```
+Then read the relevant file names and use them directly in the code.
+For sprite sheets — detect frame layout by reading the image dimensions via:
+```bash
+python3 -c "from PIL import Image; img=Image.open('/opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/[file]'); print(img.size)"
+```
+Derive frame count and grid layout from the dimensions automatically.
+
+
+## PROJECT DISCOVERY — NEVER ASK FOR FILE PATHS
+When asked to build, finish, or continue a game — automatically:
+
+1. Find the active project:
+```bash
+ls /opt/yeticlaw/openclaw/workspace/projects/
+```
+
+2. Read the brief from the project folder OR Drive:
+```bash
+cat /opt/yeticlaw/openclaw/workspace/projects/[slug]/brief.md 2>/dev/null || rclone cat gdrive:YetiClaw/gamedev/[slug]/brief.md
+```
+
+3. Check what files already exist:
+```bash
+find /opt/yeticlaw/openclaw/workspace/projects/[slug]/ -type f
+```
+
+4. Build or continue from there — never ask the user where anything is.
+
+If multiple projects exist, ask: "Which game? [list project names]" — never ask for paths.
