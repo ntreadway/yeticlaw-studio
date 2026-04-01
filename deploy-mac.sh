@@ -22,13 +22,19 @@ WORKSPACE="$HOME/.openclaw/workspace"
 SKILLS_DST="$WORKSPACE/skills"
 
 # Check prerequisites
-command -v openclaw &>/dev/null || err "OpenClaw not installed. Run: npm install -g openclaw"
-command -v ollama &>/dev/null   || err "Ollama not installed. Run: brew install ollama"
+command -v node &>/dev/null || err "Node.js not installed. Run: brew install node"
+command -v npm &>/dev/null  || err "npm not installed. Run: brew install node"
 
-# Check Ollama model
-if ! ollama list 2>/dev/null | grep -q "qwen3.5"; then
-    warn "Qwen3.5 not found. Pulling qwen3.5:14b (this may take a while)..."
-    ollama pull qwen3.5:14b
+# Install Ollama if needed
+if ! command -v ollama &>/dev/null; then
+    log "Installing Ollama..."
+    curl -fsSL https://ollama.com/install.sh | sh
+fi
+
+# Install OpenClaw if needed
+if ! command -v openclaw &>/dev/null; then
+    log "Installing OpenClaw..."
+    npm install -g openclaw
 fi
 
 # Create workspace
@@ -37,7 +43,7 @@ log "Workspace: $WORKSPACE"
 
 # Install config
 if [ ! -f "$HOME/.openclaw/openclaw.json" ]; then
-    cp "$SCRIPT_DIR/config-openclaw.json5" "$HOME/.openclaw/openclaw.json"
+    cp "$SCRIPT_DIR/config.json" "$HOME/.openclaw/openclaw.json"
     warn "Config installed — edit ~/.openclaw/openclaw.json to add your Telegram token"
 else
     log "Config already exists — skipping (edit manually if needed)"
@@ -75,16 +81,10 @@ if [ -d "$PRIVATE_DIR" ]; then
     done
 fi
 
-# Start Ollama if not running
-if ! pgrep -x ollama &>/dev/null; then
-    log "Starting Ollama..."
-    ollama serve &>/dev/null &
-    sleep 3
-fi
-
-# Install OpenClaw daemon
-log "Installing OpenClaw daemon..."
-openclaw onboard --install-daemon --yes 2>/dev/null || true
+# Launch OpenClaw via Ollama (pulls model + starts gateway)
+log "Launching OpenClaw with Qwen3.5 14B..."
+log "This will pull the model on first run (~8GB) — please wait..."
+ollama launch openclaw --model qwen3.5:14b --yes
 
 echo ""
 echo -e "${GREEN}============================================${NC}"
