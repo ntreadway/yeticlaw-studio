@@ -23,7 +23,7 @@ curl -s -X POST \
 
 Step 3 — Copy to project assets AND sync to Drive in ONE exec call:
 ```bash
-mkdir -p /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/ && cp /tmp/generated-image.png /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/[name].png && rclone copy /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/ gdrive:YetiClaw/gamedev/[slug]/assets/images/ && echo "✅ Saved and synced to Drive"
+mkdir -p ~/.openclaw/workspace/projects/[slug]/assets/images/ && cp /tmp/generated-image.png ~/.openclaw/workspace/projects/[slug]/assets/images/[name].png && rclone copy ~/.openclaw/workspace/projects/[slug]/assets/images/ gdrive:YetiClaw/gamedev/[slug]/assets/images/ && echo "✅ Saved and synced to Drive"
 ```
 
 This MUST be run as a single exec command. Do not split into multiple steps.

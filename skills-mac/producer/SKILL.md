@@ -35,7 +35,7 @@ After presenting the brief say:
 When user says "save" or "save and done":
 1. Derive slug from game name — lowercase, hyphens, no spaces (e.g. "Zeal's Dark Alchemy" → "zeals-dark-alchemy")
 2. write_file to: projects/[slug]/brief.md — write the full brief as markdown
-3. exec: rclone copy /opt/yeticlaw/openclaw/workspace/projects/[slug]/brief.md gdrive:YetiClaw/gamedev/[slug]/brief.md
+3. exec: rclone copy ~/.openclaw/workspace/projects/[slug]/brief.md gdrive:YetiClaw/gamedev/[slug]/brief.md
 4. Confirm: "✅ Saved to projects/[slug]/brief.md and gdrive:YetiClaw/gamedev/[slug]/brief.md"
 
 ## EXPANDING WITH SPECIALISTS
@@ -51,7 +51,7 @@ One spawn at a time. Short focused task only.
 ## PROJECT SWITCHING
 If user mentions a different project than current session:
 "New project detected. Clear session first:
-sudo systemctl stop yeticlaw-gateway && rm -rf /opt/yeticlaw/openclaw/workspace/sessions/ && sudo systemctl start yeticlaw-gateway"
+sudo systemctl stop yeticlaw-gateway && rm -rf ~/.openclaw/workspace/sessions/ && sudo systemctl start yeticlaw-gateway"
 
 ## WHAT'S NEXT
 After presenting the brief, always end with:
@@ -66,7 +66,7 @@ After presenting the brief, always end with:
 ## PROJECT DISCOVERY — NEVER ASK FOR FILE PATHS
 When starting any task, automatically find the active project:
 ```bash
-ls /opt/yeticlaw/openclaw/workspace/projects/
+ls ~/.openclaw/workspace/projects/
 ```
 If one project exists — use it. If multiple — ask "Which project?" with names only, never paths.
 Read the brief, check existing files, and start working. Never ask the user for paths, slugs, or folder locations.

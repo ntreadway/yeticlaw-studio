@@ -51,9 +51,9 @@ MODEL_URL=$(curl -s "https://api.meshy.ai/openapi/v2/text-to-3d/$TASK_ID" \
 wget -q "$MODEL_URL" -O "/tmp/[NAME].glb"
 
 # Step 4 — Save to Google Drive
-mkdir -p "/opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/models/"
-cp "/tmp/[NAME].glb" "/opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/models/[NAME].glb"
-rclone copy "/opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/models/[NAME].glb" "gdrive:YetiClaw/gamedev/[slug]/assets/models/"
+mkdir -p "~/.openclaw/workspace/projects/[slug]/assets/models/"
+cp "/tmp/[NAME].glb" "~/.openclaw/workspace/projects/[slug]/assets/models/[NAME].glb"
+rclone copy "~/.openclaw/workspace/projects/[slug]/assets/models/[NAME].glb" "gdrive:YetiClaw/gamedev/[slug]/assets/models/"
 ```
 
 ## Image to 3D Workflow
@@ -102,7 +102,7 @@ After generating assets, always end with:
 ## PROJECT DISCOVERY — NEVER ASK FOR FILE PATHS
 When starting any task, automatically find the active project:
 ```bash
-ls /opt/yeticlaw/openclaw/workspace/projects/
+ls ~/.openclaw/workspace/projects/
 ```
 If one project exists — use it. If multiple — ask "Which project?" with names only, never paths.
 Read the brief, check existing files, and start working. Never ask the user for paths, slugs, or folder locations.

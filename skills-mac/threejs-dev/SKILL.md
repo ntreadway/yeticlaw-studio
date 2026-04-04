@@ -86,7 +86,7 @@ projects/[slug]/code/
 After saving files, tell the creator:
 ```
 To play locally:
-cd /opt/yeticlaw/openclaw/workspace/projects/[slug]/code
+cd ~/.openclaw/workspace/projects/[slug]/code
 npm install
 npm run dev
 # Open http://[pi-ip]:5173 in your browser
@@ -99,7 +99,7 @@ npm run build
 ## Saving Files
 Use write_file for EVERY code file. After writing all files:
 ```
-rclone copy /opt/yeticlaw/openclaw/workspace/projects/[slug]/code gdrive:YetiClaw/gamedev/[slug]/code
+rclone copy ~/.openclaw/workspace/projects/[slug]/code gdrive:YetiClaw/gamedev/[slug]/code
 ```
 
 ## Asset Pipeline — coordinate, don't generate
@@ -187,12 +187,12 @@ On 'continue' — pick up exactly where you left off, do not rewrite completed f
 When told a new asset is ready or to integrate assets — NEVER ask the user for file paths or frame counts.
 Instead run:
 ```bash
-ls /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/
+ls ~/.openclaw/workspace/projects/[slug]/assets/images/
 ```
 Then read the relevant file names and use them directly in the code.
 For sprite sheets — detect frame layout by reading the image dimensions via:
 ```bash
-python3 -c "from PIL import Image; img=Image.open('/opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/[file]'); print(img.size)"
+python3 -c "from PIL import Image; img=Image.open('~/.openclaw/workspace/projects/[slug]/assets/images/[file]'); print(img.size)"
 ```
 Derive frame count and grid layout from the dimensions automatically.
 
@@ -202,17 +202,17 @@ When asked to build, finish, or continue a game — automatically:
 
 1. Find the active project:
 ```bash
-ls /opt/yeticlaw/openclaw/workspace/projects/
+ls ~/.openclaw/workspace/projects/
 ```
 
 2. Read the brief from the project folder OR Drive:
 ```bash
-cat /opt/yeticlaw/openclaw/workspace/projects/[slug]/brief.md 2>/dev/null || rclone cat gdrive:YetiClaw/gamedev/[slug]/brief.md
+cat ~/.openclaw/workspace/projects/[slug]/brief.md 2>/dev/null || rclone cat gdrive:YetiClaw/gamedev/[slug]/brief.md
 ```
 
 3. Check what files already exist:
 ```bash
-find /opt/yeticlaw/openclaw/workspace/projects/[slug]/ -type f
+find ~/.openclaw/workspace/projects/[slug]/ -type f
 ```
 
 4. Build or continue from there — never ask the user where anything is.
