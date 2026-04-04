@@ -89,6 +89,7 @@ AGENTS="creative-director technical-director producer \
         art-director sound-designer technical-artist \
         narrative-director writer world-builder qa-tester \
         threejs-dev ai-consultant email-writer \
+        imagegen asset-approver \
         asset-approver meshy \
         game-namer concept-writer mechanics-designer style-writer"
 
