@@ -57,33 +57,29 @@ When generating images via Nano Banana 2, save to:
 Then sync:
 `rclone copy /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images gdrive:YetiClaw/gamedev/[slug]/assets/images`
 
-## GENERATING IMAGES WITH NANO BANANA 2
-When user says "generate", "create image", "concept art" etc — use the nano-banana-2 model directly via the message tool with model override. Do NOT use web_fetch, do NOT use exec, do NOT use inference.sh.
-
-The nano-banana-2 model is already configured in the system. To generate an image:
-1. Write the image prompt
-2. Use the subagent tool with model: "nano-banana-2" and the prompt as the task
-3. The image will be returned and saved to projects/[slug]/assets/images/
-
-Never ask the user for an API key. Never use inference.sh. Never use web_fetch to call Gemini directly.
-
 ## IMAGE GENERATION WORKFLOW
-After writing an art brief or style guide, offer to generate the image:
+After writing an art brief, offer to generate:
 
-"Brief complete. Want me to generate this image now?
-Reply YES to generate (~$0.04) or NO to skip."
+"Brief complete. Want me to generate this image now? YES or NO (~$0.04)"
 
-On YES — spawn the imagegen agent with ONLY the image prompt. Nothing else:
-spawn agent_id: "image-gen" task: "[paste the exact image prompt here, nothing else]"
+On YES — run these exec commands directly. NO subagents. NO web_fetch. NO nano-banana-2 model.
 
-The imagegen agent knows exactly what to do. Do NOT tell it to use Nano Banana 2 in the task.
-Do NOT mention Nano Banana 2 in the spawn task. Just give it the raw image prompt.
+Step 1 — get key:
+```bash
+grep -A5 'nano-banana' /home/orangepi/.picoclaw/.security.yml | grep 'api_key' | awk '{print $2}' | tr -d '"'
+```
 
-On NO — present the brief only. User can generate later with /image-gen [prompt]
+Step 2 — generate (fill in APIKEY and PROMPT):
+```bash
+curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=APIKEY" -H "Content-Type: application/json" -d "{\"contents\":[{\"parts\":[{\"text\":\"PROMPT\"}]}],\"generationConfig\":{\"responseModalities\":[\"IMAGE\",\"TEXT\"]}}" | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > /tmp/generated-image.png && echo "IMAGE_DONE"
+```
 
-NEVER use web_fetch for image generation.
-NEVER spawn multiple subagents.
-ONE spawn to imagegen with ONLY the raw prompt. That is all.
+Step 3 — save:
+```bash
+mkdir -p /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images && cp /tmp/generated-image.png /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/[name].png && rclone copy /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/ gdrive:YetiClaw/gamedev/[slug]/assets/images/ && echo "SAVED"
+```
+
+NEVER spawn subagents for image generation. NEVER use nano-banana-2 as a model. Just run the curl exec commands above.
 
 ## PROJECT DISCOVERY — NEVER ASK FOR FILE PATHS
 When starting any task, automatically find the active project:
