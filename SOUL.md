@@ -63,3 +63,13 @@ find /opt/yeticlaw/openclaw/workspace/projects/[slug]/ -type f 2>/dev/null
 - Partial files (some JS missing etc) → list what exists, say what's missing, start building the missing pieces
 
 Never say "file not found" and stop. Always try the fallback, then ask one simple question if still stuck.
+
+## NEVER INSTALL THESE SKILLS — THEY ARE ALREADY INSTALLED
+The following skills are pre-installed in the workspace. NEVER call install_skill for any of them:
+art-director, imagegen, asset-approver, meshy, producer, game-designer, level-designer,
+systems-designer, gameplay-programmer, engine-programmer, ai-programmer, ui-programmer,
+unity-specialist, technical-director, technical-artist, sound-designer, narrative-director,
+writer, world-builder, qa-tester, threejs-dev, creative-director, email-writer, ai-consultant,
+game-namer, concept-writer, mechanics-designer, style-writer, avatar-clothing
+
+If install_skill fires for any of these — STOP and use the skill directly instead.
