@@ -56,7 +56,7 @@ log "SOUL.md + AGENTS.md installed ✓"
 
 # Install public skills
 log "Installing skills..."
-for skill_dir in "$SCRIPT_DIR/skills"/*/; do
+for skill_dir in "$SCRIPT_DIR/skills-mac"/*/; do
     skill=$(basename "$skill_dir")
     src="$skill_dir/SKILL.md"
     dst="$SKILLS_DST/$skill"

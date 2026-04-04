@@ -25,12 +25,12 @@ cat /opt/yeticlaw/openclaw/workspace/projects/[slug]/brief.md
 
 **Step 2: Pick a template**
 ```bash
-ls /opt/yeticlaw/openclaw/skills/threejs-dev/templates/
+ls /opt/yeticlaw/openclaw/workspace/skills/threejs-dev/templates/
 ```
 Each template has a `SCHEMA.md` next to it describing what config it expects.
 Read the schema for your chosen template:
 ```bash
-cat /opt/yeticlaw/openclaw/skills/threejs-dev/templates/[name]/SCHEMA.md
+cat /opt/yeticlaw/openclaw/workspace/skills/threejs-dev/templates/[name]/SCHEMA.md
 ```
 
 Template selection guide:
@@ -54,7 +54,7 @@ then use `/skillcreator` to build the template, or wait for Mac deployment."
 **Step 3: Copy template to project**
 ```bash
 mkdir -p /opt/yeticlaw/openclaw/workspace/projects/[slug]/html
-cp /opt/yeticlaw/openclaw/skills/threejs-dev/templates/[name]/index.html \
+cp /opt/yeticlaw/openclaw/workspace/skills/threejs-dev/templates/[name]/index.html \
    /opt/yeticlaw/openclaw/workspace/projects/[slug]/html/index.html
 ```
 

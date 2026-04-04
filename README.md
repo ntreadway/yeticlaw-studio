@@ -406,3 +406,13 @@ On a Mac Mini with Unity Editor installed, you can connect Picoclaw directly to 
 ```
 
 No copy-paste required. The agent writes, compiles, and debugs in a live Unity session.
+
+## Skill Tiers
+
+| Directory | Target | Model | Writing style |
+|-----------|--------|-------|---------------|
+| `skills/` | Orange Pi | Qwen3.5 4B | Chunked — one file at a time |
+| `skills-mac/` | Mac Mini M2 | Qwen3.5 14B | Full context — complete files in one shot |
+
+The Pi deploy (`deploy.sh`) uses `skills/`.
+The Mac deploy (`deploy-mac.sh`) uses `skills-mac/`.

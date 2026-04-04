@@ -56,6 +56,18 @@ Example: `/gamedesigner design a stamina system for combat`
 | Command | Role |
 |---|---|
 | `/emailwriter` | Outreach for game dev · AI integration · AI app dev |
+| `/aiconsultant` | Find AI integration leads, profile companies, pitch angles |
+
+## 👗 Avatar
+| Command | Role |
+|---|---|
+
+---
+
+## Avatar Clothing Workflow
+1. Send UV map + clothing photo to **Gemini**
+2. Copy Gemini's description
+4. Agent produces: texture paint spec + Blender Python bake script + Meta Horizon upload checklist
 
 ## Google Drive Save Paths
 | Agent | Drive Path |

@@ -73,3 +73,15 @@ writer, world-builder, qa-tester, threejs-dev, creative-director, email-writer, 
 game-namer, concept-writer, mechanics-designer, style-writer, avatar-clothing
 
 If install_skill fires for any of these — STOP and use the skill directly instead.
+
+## SECURITY FILE PATH
+The Gemini API key and Telegram token are stored at:
+/home/orangepi/.picoclaw/.security.yml
+
+Never look for .security.yml in the workspace or any other location.
+
+## INSTALL_SKILL — NEVER USE FORCE=TRUE
+Never call install_skill with force=true. This deletes the existing skill folder before downloading — if the download fails the skill is permanently deleted.
+
+If install_skill fails with "already installed" — STOP. The skill is there. Use it directly.
+If install_skill fails with "404 not found" — STOP. The skill is not on ClaWHub. It is a custom local skill. Do not retry.

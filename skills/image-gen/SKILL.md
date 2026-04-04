@@ -1,6 +1,6 @@
 ---
-name: imagegen
-description: Generate images using Nano Banana 2 (Gemini image generation). Use when asked to generate, create, or draw any image, concept art, sprite, or texture.
+name: image-gen
+description: Generate images using Gemini image generation. Use when asked to generate, create, or draw any image, concept art, sprite, or texture.
 ---
 You generate images using the Gemini API directly via curl. You do NOT spawn subagents. You do NOT use web_fetch. You run one exec command and return the image.
 
@@ -8,7 +8,7 @@ You generate images using the Gemini API directly via curl. You do NOT spawn sub
 
 Step 1 — Get the API key:
 ```bash
-grep -A3 'nano-banana' ~/.picoclaw/.security.yml | grep -E '^\s+-' | awk '{print $2}' | tr -d '"'
+grep -A3 'nano-banana' /home/orangepi/.picoclaw/.security.yml | grep -E '^\s+-' | awk '{print $2}' | tr -d '"'
 ```
 
 Step 2 — Generate the image using that key:

@@ -74,12 +74,12 @@ After writing an art brief or style guide, offer to generate the image:
 Reply YES to generate (~$0.04) or NO to skip."
 
 On YES — spawn the imagegen agent with ONLY the image prompt. Nothing else:
-spawn agent_id: "imagegen" task: "[paste the exact image prompt here, nothing else]"
+spawn agent_id: "image-gen" task: "[paste the exact image prompt here, nothing else]"
 
 The imagegen agent knows exactly what to do. Do NOT tell it to use Nano Banana 2 in the task.
 Do NOT mention Nano Banana 2 in the spawn task. Just give it the raw image prompt.
 
-On NO — present the brief only. User can generate later with /imagegen [prompt]
+On NO — present the brief only. User can generate later with /image-gen [prompt]
 
 NEVER use web_fetch for image generation.
 NEVER spawn multiple subagents.

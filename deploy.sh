@@ -31,14 +31,14 @@ else
     log "rclone $(rclone version | head -1) ✓"
 fi
 
-if ! rclone listremotes 2>/dev/null | grep -q "^gdrive:"; then
+if ! su - orangepi -c "rclone listremotes" 2>/dev/null | grep -q "^gdrive:"; then
     warn "Google Drive remote 'gdrive' not configured."
     warn "After deploy, run as orangepi: rclone config"
     warn "(Name the remote 'gdrive', type: drive, follow OAuth)"
 else
     log "gdrive remote found — creating folder structure..."
     for folder in threejs outreach gamedev meshy-models asset-spend; do
-        rclone mkdir "gdrive:YetiClaw/$folder" 2>/dev/null || true
+        su - orangepi -c "rclone mkdir gdrive:YetiClaw/$folder" 2>/dev/null || true
     done
     log "Drive folders ready ✓"
 fi
@@ -81,26 +81,16 @@ else
 fi
 
 # ── Skills ────────────────────────────────────────────────────────────────────
-# Note: avatar-clothing and full email-writer are in yeticlaw-private/
-# Run deploy-private.sh after this to install them
-AGENTS="creative-director technical-director producer \
-        game-designer level-designer systems-designer \
-        gameplay-programmer engine-programmer ai-programmer ui-programmer unity-specialist \
-        art-director sound-designer technical-artist \
-        narrative-director writer world-builder qa-tester \
-        threejs-dev ai-consultant email-writer \
-        imagegen asset-approver \
-        asset-approver meshy \
-        game-namer concept-writer mechanics-designer style-writer"
-
+# Auto-installs all skills from the skills/ folder — no list to maintain
 log "Installing skill files..."
-for agent in $AGENTS; do
-    src="$SCRIPT_DIR/skills/$agent/SKILL.md"
-    dst="$WORKSPACE/skills/$agent"
-    [ -f "$src" ] || { warn "Missing $src — skipping"; continue; }
+for skill_dir in "$SCRIPT_DIR"/skills/*/; do
+    skill=$(basename "$skill_dir")
+    src="$skill_dir/SKILL.md"
+    dst="$WORKSPACE/skills/$skill"
+    [ -f "$src" ] || continue
     mkdir -p "$dst"
     cp "$src" "$dst/SKILL.md"
-    log "  ✓ $agent"
+    log "  ✓ $skill"
 done
 
 # AGENTS.md reference doc
