@@ -62,24 +62,14 @@ After writing an art brief, offer to generate:
 
 "Brief complete. Want me to generate this image now? YES or NO (~$0.04)"
 
-On YES — run these exec commands directly. NO subagents. NO web_fetch. NO nano-banana-2 model.
+On YES — use the spawn tool with these exact parameters:
+- task: the raw image prompt (visual description only)
+- label: "Image Generation"
+- agent_id: "nano-banana-2"
 
-Step 1 — get key:
-```bash
-cat /home/orangepi/.picoclaw/.security.yml | grep -A2 "api_key" | tail -1 | awk '{print $2}'
-```
+Do NOT add instructions to the task. Just the raw visual description.
 
-Step 2 — generate (fill in APIKEY and PROMPT):
-```bash
-curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=APIKEY" -H "Content-Type: application/json" -d "{\"contents\":[{\"parts\":[{\"text\":\"PROMPT\"}]}],\"generationConfig\":{\"responseModalities\":[\"IMAGE\",\"TEXT\"]}}" | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > /tmp/generated-image.png && echo "IMAGE_DONE"
-```
-
-Step 3 — save:
-```bash
-mkdir -p /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images && cp /tmp/generated-image.png /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/[name].png && rclone copy /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/ gdrive:YetiClaw/gamedev/[slug]/assets/images/ && echo "SAVED"
-```
-
-NEVER spawn subagents for image generation. NEVER use nano-banana-2 as a model. Just run the curl exec commands above.
+On NO — present the brief only.
 
 ## PROJECT DISCOVERY — NEVER ASK FOR FILE PATHS
 When starting any task, automatically find the active project:

@@ -74,9 +74,9 @@ Each expansion spawns ONE specialist agent focused on that section only.
 With the brief saved, any agent can read it directly:
 
 ```
-/threejsdev scaffold the project structure for the Pac-Man game
-/gamedesigner design the power-up system
-/narrativedirector write the game's story and character bios
+/threejs-dev scaffold the project structure for the Pac-Man game
+/game-designer design the power-up system
+/narrative-director write the game's story and character bios
 ```
 
 ---
@@ -86,56 +86,56 @@ With the brief saved, any agent can read it directly:
 ### 🎬 Directors
 | Command | Role |
 |---|---|
-| `/creativedirector` | Creative vision, tone, aesthetic, MDA review |
-| `/technicaldirector` | Unity/Three.js architecture decisions (code-gen) |
+| `/creative-director` | Creative vision, tone, aesthetic, MDA review |
+| `/technical-director` | Unity/Three.js architecture decisions (code-gen) |
 | `/producer` | **Game brief creation** + sprint planning, milestones, blockers |
 
 ### 🎮 Game Design
 | Command | Role |
 |---|---|
-| `/gamedesigner` | Mechanics, GDDs, MDA framework, Bartle player types |
-| `/leveldesigner` | Level layouts, flow, pacing, encounters |
-| `/systemsdesigner` | Economy, progression, data-driven systems |
+| `/game-designer` | Mechanics, GDDs, MDA framework, Bartle player types |
+| `/level-designer` | Level layouts, flow, pacing, encounters |
+| `/systems-designer` | Economy, progression, data-driven systems |
 
 ### 💻 Programming (code-gen — Unity Editor not required on this machine)
 | Command | Role |
 |---|---|
-| `/gameplayprogrammer` | Unity C# player mechanics, movement, combat |
-| `/engineprogrammer` | Unity C# core: save systems, scene management, Addressables |
-| `/aiprogrammer` | Unity C# enemy AI, behavior trees, NavMesh |
-| `/uiprogrammer` | Unity UI Toolkit, HUD, menus, accessibility |
-| `/unityspecialist` | Package conflicts, editor scripting, render pipeline |
+| `/gameplay-programmer` | Unity C# player mechanics, movement, combat |
+| `/engine-programmer` | Unity C# core: save systems, scene management, Addressables |
+| `/ai-programmer` | Unity C# enemy AI, behavior trees, NavMesh |
+| `/ui-programmer` | Unity UI Toolkit, HUD, menus, accessibility |
+| `/unity-specialist` | Package conflicts, editor scripting, render pipeline |
 
 ### 🎨 Art & Audio
 | Command | Role |
 |---|---|
-| `/artdirector` | Visual style guide, art briefs, concept generation (Nano Banana 2) |
-| `/sounddesigner` | Audio identity, FMOD events, adaptive music |
-| `/technicalartist` | Shaders, VFX Graph, asset import pipeline (code-gen) |
+| `/art-director` | Visual style guide, art briefs, concept generation (Nano Banana 2) |
+| `/sound-designer` | Audio identity, FMOD events, adaptive music |
+| `/technical-artist` | Shaders, VFX Graph, asset import pipeline (code-gen) |
 
 ### 📖 Narrative & QA
 | Command | Role |
 |---|---|
-| `/narrativedirector` | Story structure, character arcs, narrative design |
+| `/narrative-director` | Story structure, character arcs, narrative design |
 | `/writer` | Dialogue, UI copy, item descriptions, voice guide |
-| `/worldbuilder` | Lore, factions, geography, world bible |
-| `/qatester` | Test plans, bug reports (Critical / High / Medium / Low) |
+| `/world-builder` | Lore, factions, geography, world bible |
+| `/qa-tester` | Test plans, bug reports (Critical / High / Medium / Low) |
 
 ### 🌐 Web & XR
 | Command | Role |
 |---|---|
-| `/threejsdev` | TypeScript Three.js games for VIVERSE (WebGL/WebXR) |
+| `/threejs-dev` | TypeScript Three.js games for VIVERSE (WebGL/WebXR) |
 
 ### 💼 Business
 | Command | Role |
 |---|---|
-| `/emailwriter` | Outreach for game dev · AI integration · AI app dev |
-| `/aiconsultant` | AI strategy and consulting for studios and SMBs |
+| `/email-writer` | Outreach for game dev · AI integration · AI app dev |
+| `/ai-consultant` | AI strategy and consulting for studios and SMBs |
 
 ### 💰 Asset Generation (approval required before any paid API fires)
 | Command | Role |
 |---|---|
-| `/assetapprover` | Budget gate — shows cost, waits for `/approve` or `/deny` |
+| `/asset-approver` | Budget gate — shows cost, waits for `/approve` or `/deny` |
 | `/meshy` | Meshy.ai text-to-3D and image-to-3D (GLB output) |
 
 ---
@@ -143,9 +143,9 @@ With the brief saved, any agent can read it directly:
 ## Asset Generation Workflow
 
 ```
-/threejsdev or /artdirector
+/threejs-dev or /art-director
     → produces Asset Brief
-        → /assetapprover [brief]
+        → /asset-approver [brief]
             → shows cost estimate in Telegram
                 → you reply /approve [name] or /deny [name]
                     ✓ approve → Nano Banana 2 or /meshy executes
@@ -397,7 +397,7 @@ On a Mac Mini with Unity Editor installed, you can connect Picoclaw directly to 
 ### What this enables
 
 ```
-/gameplayprogrammer implement the ghost AI behaviour
+/gameplay-programmer implement the ghost AI behaviour
 → writes PlayerBrewing.cs directly into Unity via MCP
 → triggers compile
 → reads console errors
