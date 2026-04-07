@@ -738,14 +738,12 @@
     gap: 5px;
     cursor: pointer;
     padding: 0.5rem;
-    margin-left: auto;
   }
   .nav-hamburger span {
     display: block;
     width: 22px;
     height: 2px;
     background: #fff;
-    transition: 0.3s;
   }
   .nav-mobile-menu {
     display: none;
@@ -753,6 +751,7 @@
     background: rgba(13,13,13,0.98);
     border-top: 1px solid rgba(255,255,255,0.08);
     padding: 1rem 0;
+    width: 100%;
   }
   .nav-mobile-menu.open { display: flex; }
   .nav-mobile-menu a {
@@ -769,18 +768,22 @@
     font-weight: 700;
     border-bottom: none;
   }
+  .sticky-nav-hamburger-row { display: none; }
 
   @media (max-width: 768px) {
     .sticky-nav-inner { display: none; }
     .nav-hamburger { display: flex; }
-    .sticky-nav { display: flex; flex-direction: column; }
+    .sticky-nav { display: flex; flex-direction: column; width: 100%; max-width: 100%; overflow: hidden; }
     .sticky-nav-hamburger-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 1.5rem;
       height: 52px;
+      width: 100%;
+      max-width: 100%;
     }
+    .sticky-nav-inner { display: none; }
     .sticky-nav-logo-mobile {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
