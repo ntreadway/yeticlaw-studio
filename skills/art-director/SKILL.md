@@ -66,7 +66,7 @@ On YES — run these exec commands directly. NO subagents. NO web_fetch. NO nano
 
 Step 1 — get key:
 ```bash
-grep -A5 'nano-banana' /home/orangepi/.picoclaw/.security.yml | grep 'api_key' | awk '{print $2}' | tr -d '"'
+cat /home/orangepi/.picoclaw/.security.yml | grep -A2 "api_key" | tail -1 | awk '{print $2}'
 ```
 
 Step 2 — generate (fill in APIKEY and PROMPT):
