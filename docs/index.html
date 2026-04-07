@@ -19,6 +19,11 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--paper);
@@ -726,6 +731,67 @@
     text-transform: uppercase;
   }
 
+  /* MOBILE NAV */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-left: auto;
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #fff;
+    transition: 0.3s;
+  }
+  .nav-mobile-menu {
+    display: none;
+    flex-direction: column;
+    background: rgba(13,13,13,0.98);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 1rem 0;
+  }
+  .nav-mobile-menu.open { display: flex; }
+  .nav-mobile-menu a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .nav-mobile-menu a:last-child {
+    color: var(--accent);
+    font-weight: 700;
+    border-bottom: none;
+  }
+
+  @media (max-width: 768px) {
+    .sticky-nav-inner { display: none; }
+    .nav-hamburger { display: flex; }
+    .sticky-nav { display: flex; flex-direction: column; }
+    .sticky-nav-hamburger-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      height: 52px;
+    }
+    .sticky-nav-logo-mobile {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .sticky-nav-logo-mobile span { color: var(--accent); }
+  }
+
   @media (max-width: 768px) {
     .sticky-nav-inner { padding: 0 1rem; gap: 0; }
     .sticky-nav a { padding: 0 0.9rem; font-size: 0.75rem; }
@@ -734,7 +800,11 @@
 
   /* RESPONSIVE */
   @media (max-width: 768px) {
-    .hero-nav, .hero-content, .hero-footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .hero-nav { padding: 1.5rem 1.5rem; flex-wrap: wrap; gap: 0.5rem; }
+    .hero-tag { font-size: 0.65rem; }
+    .hero-title { font-size: clamp(2rem, 9vw, 3.5rem); word-break: break-word; overflow-wrap: break-word; }
+    .hero-content { padding-left: 1.5rem; padding-right: 1.5rem; max-width: 100%; }
+    .hero-footer { padding-left: 1.5rem; padding-right: 1.5rem; }
     section, .problem-inner, .use-cases-inner, .build-inner, .studio-inner, .cta-inner { padding: 3rem 1.5rem; }
     .problem-grid, .use-cases-grid, .studio-agents { grid-template-columns: 1fr; }
     .agent-explainer, .cta-inner { grid-template-columns: 1fr; gap: 2rem; }
@@ -760,6 +830,20 @@
       <a href="#process">Process</a>
       <a href="#studio">Case Study</a>
       <a href="#pricing" class="sticky-nav-cta">Get Started</a>
+    </div>
+    <div class="sticky-nav-hamburger-row">
+      <div class="sticky-nav-logo-mobile">Yeti<span>Claw</span></div>
+      <div class="nav-hamburger" id="nav-hamburger" onclick="document.getElementById('nav-mobile-menu').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="nav-mobile-menu" id="nav-mobile-menu">
+      <a href="#problem" onclick="document.getElementById('nav-mobile-menu').classList.remove('open')">The Problem</a>
+      <a href="#how-it-works" onclick="document.getElementById('nav-mobile-menu').classList.remove('open')">How It Works</a>
+      <a href="#industries" onclick="document.getElementById('nav-mobile-menu').classList.remove('open')">Industries</a>
+      <a href="#process" onclick="document.getElementById('nav-mobile-menu').classList.remove('open')">Process</a>
+      <a href="#studio" onclick="document.getElementById('nav-mobile-menu').classList.remove('open')">Case Study</a>
+      <a href="#pricing" onclick="document.getElementById('nav-mobile-menu').classList.remove('open')">→ Get Started</a>
     </div>
   </nav>
 
