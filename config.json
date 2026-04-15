@@ -214,6 +214,13 @@
             "model_name": "nano-banana-2",
             "model": "gemini/gemini-3.1-flash-image-preview",
             "api_key": "YOUR_GEMINI_API_KEY"
+        },
+        {
+            "model_name": "gemma4:e4b",
+            "model": "ollama/gemma4:e4b",
+            "api_base": "http://127.0.0.1:11434/v1",
+            "api_key": "none",
+            "timeout": 600
         }
     ],
     "channels": {

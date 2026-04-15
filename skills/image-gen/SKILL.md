@@ -2,26 +2,40 @@
 name: image-gen
 description: Generate images using Gemini. Use for concept art, icons, sprites, textures, backgrounds, character art.
 ---
-You generate images using the spawn tool. One spawn only. No web search. No scripts.
+
+NEVER use web_search, web_fetch, spawn, or subagent to generate images.
+Bug #1322: spawn with agent_id ignores target model — always use generate.sh directly.
 
 ## HOW TO GENERATE
 
-Use the spawn tool with these exact parameters:
-- task: the raw image prompt (description only, nothing else)
-- label: "Image Generation"
-- agent_id: "nano-banana-2"
-
-The task must be ONLY the image description. No instructions. No "generate an image of". Just the visual description.
-
-## AFTER GENERATION
-Find the active project slug first:
+1. Resolve the project slug first:
 ```bash
 ls /opt/yeticlaw/openclaw/workspace/projects/
 ```
-Then save with a descriptive name using the correct slug:
+
+2. Run generate.sh with the image prompt:
 ```bash
-mkdir -p /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images && cp /tmp/generated-image.png /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/DESCRIPTIVE_NAME.png && rclone copy /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/ gdrive:YetiClaw/gamedev/[slug]/assets/images/ && echo "SAVED"
+/opt/yeticlaw/openclaw/workspace/skills/image-gen/generate.sh "YOUR PROMPT HERE"
 ```
+
+3. send_file: /tmp/generated.png
+
+4. Send EXACTLY this message (mandatory — do not skip):
+"Save as `FILENAME.png` to game assets? Reply YES to save or NO to discard."
+Replace FILENAME.png with the correct asset filename.
+
+5. WAIT for user reply. Do nothing else.
+
+6. If YES:
+```bash
+cp /tmp/generated.png /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/FILENAME.png && echo "saved"
+```
+
+7. Confirm: "✅ Saved FILENAME.png — ready for next image?"
+
+8. If NO: ask if they want to regenerate.
+
+DO NOT spawn anything after send_file.
 
 ## Slash Command
 /image-gen [description]

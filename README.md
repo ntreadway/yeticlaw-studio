@@ -27,6 +27,7 @@ A complete Picoclaw skill pack that turns your private hardware into a full AI g
 **Works on:**
 - 🍊 Orange Pi 6 Plus (ARM64) — the original YetiClaw setup
 - 🍎 macOS (Apple Silicon or Intel)
+- 🪟 Windows 10/11 (x64) — via Ollama + OpenClaw
 - 🐧 Any Linux x86_64 or ARM64 machine
 
 ---
@@ -172,8 +173,12 @@ With the brief saved, any agent can read it directly:
 - Custom Picoclaw binary with 600s timeout fix (see below)
 
 ### macOS only
-- [Ollama](https://ollama.com) — serves Qwen3.5 locally
+- [Ollama](https://ollama.com) — serves models locally
 - Apple Silicon recommended
+
+### Windows only
+- [Ollama for Windows](https://ollama.com/download/windows) — `OllamaSetup.exe`, no admin rights required
+- NVIDIA GPU recommended (8GB+ VRAM) or modern CPU with AVX2
 
 ---
 
@@ -253,6 +258,78 @@ bash deploy-mac.sh
 picoclaw gateway
 ```
 
+
+---
+
+### 🪟 Windows
+
+#### Step 1 — Install Ollama
+
+Download and run `OllamaSetup.exe` from [ollama.com/download/windows](https://ollama.com/download/windows).  
+No administrator rights required. Or use PowerShell:
+
+```powershell
+irm https://ollama.com/install.ps1 | iex
+```
+
+Ollama runs in the background automatically and serves on `http://localhost:11434`.
+
+#### Step 2 — Launch OpenClaw with gemma4:e4b
+
+```powershell
+ollama launch openclaw --model gemma4:e4b --yes
+```
+
+Ollama will download `gemma4:e4b` (~9.6GB) on first run and launch the OpenClaw setup wizard to configure your Telegram bot token.
+
+#### Step 3 — Deploy agents
+
+Open PowerShell in the `yeticlaw-studio` folder:
+
+```powershell
+# Create workspace folders
+$workspace = "$env:USERPROFILE\.openclaw\workspace\skills"
+New-Item -ItemType Directory -Force -Path $workspace
+
+# Copy SOUL.md + AGENTS.md
+Copy-Item SOUL.md "$env:USERPROFILE\.openclaw\workspace\SOUL.md"
+Copy-Item AGENTS.md "$env:USERPROFILE\.openclaw\workspace\AGENTS.md"
+
+# Install all skills from skills-mac/ (same skills, works on Windows)
+Get-ChildItem skills-mac -Directory | ForEach-Object {
+    $dst = "$workspace\$($_.Name)"
+    New-Item -ItemType Directory -Force -Path $dst | Out-Null
+    Copy-Item "$($_.FullName)\SKILL.md" "$dst\SKILL.md"
+    Write-Host "  ✓ $($_.Name)"
+}
+
+Write-Host "Done — $((Get-ChildItem $workspace -Directory).Count) skills installed"
+```
+
+#### Step 4 — Configure secrets
+
+Edit the OpenClaw config (created during `ollama launch openclaw` setup):
+
+```
+%USERPROFILE%\.openclaw\openclaw.json
+```
+
+Set your Telegram bot token and Gemini API key (for Nano Banana 2 / image generation).
+
+#### Step 5 — Set up Google Drive (optional)
+
+```powershell
+winget install Rclone.Rclone
+rclone config  # n → gdrive → drive → follow OAuth
+```
+
+#### Notes
+
+- **GPU:** NVIDIA cards use CUDA automatically. AMD cards use DirectML. CPU-only works but is slower.
+- **Model storage:** Ollama stores models in `%USERPROFILE%\.ollama\models` by default. Set `OLLAMA_MODELS` env var to change this.
+- **Service install:** For always-on use, install as a Windows service with [NSSM](https://nssm.cc): `nssm install ollama "C:\Users\you\AppData\Local\Programs\Ollama\ollama.exe" serve`
+- **No `deploy.sh`:** The bash deploy script won't run on Windows. Use the PowerShell commands above instead.
+
 ---
 
 ## Important: Custom Binary Required (Orange Pi)
@@ -314,14 +391,15 @@ rclone config reconnect gdrive:
 
 ## Platform Differences
 
-| Feature | Orange Pi 6 Plus | macOS |
-|---|---|---|
-| Model server | llama.cpp (KleidiAI optimized) | Ollama |
-| Speed | ~12 tok/s gen | ~40+ tok/s (M-series) |
-| Picoclaw binary | Custom build (600s timeout) | Official release |
-| Gateway service | systemd | LaunchAgent or foreground |
-| Deploy script | `deploy.sh` (sudo required) | `deploy-mac.sh` (no sudo) |
-| Workspace path | `/opt/yeticlaw/openclaw/workspace` | `~/.picoclaw/workspace` |
+| Feature | Orange Pi 6 Plus | macOS | Windows |
+|---|---|---|---|
+| Model server | llama.cpp (KleidiAI optimized) | Ollama | Ollama |
+| Model | Qwen3.5 4B | gemma4:e4b | gemma4:e4b |
+| Speed | ~12 tok/s gen | ~57 tok/s (M-series) | varies (GPU recommended) |
+| Picoclaw binary | Custom build (600s timeout) | Official release | Official release |
+| Gateway service | systemd | LaunchAgent or foreground | Foreground or NSSM service |
+| Deploy script | `deploy.sh` (sudo required) | `deploy-mac.sh` (no sudo) | PowerShell (manual) |
+| Workspace path | `/opt/yeticlaw/openclaw/workspace` | `~/.openclaw/workspace` | `%USERPROFILE%\.openclaw\workspace` |
 
 ---
 
@@ -412,7 +490,7 @@ No copy-paste required. The agent writes, compiles, and debugs in a live Unity s
 | Directory | Target | Model | Writing style |
 |-----------|--------|-------|---------------|
 | `skills/` | Orange Pi | Qwen3.5 4B | Chunked — one file at a time |
-| `skills-mac/` | Mac Mini M2 | Qwen3.5 14B | Full context — complete files in one shot |
+| `skills-mac/` | Mac / Windows | gemma4:e4b | Full context — complete files in one shot |
 
 The Pi deploy (`deploy.sh`) uses `skills/`.
 The Mac deploy (`deploy-mac.sh`) uses `skills-mac/`.

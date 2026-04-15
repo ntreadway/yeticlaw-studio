@@ -5,7 +5,7 @@
 # Prerequisites:
 #   brew install node ollama
 #   npm install -g openclaw
-#   ollama pull qwen3.5:14b
+#   ollama pull gemma4:e4b
 #
 # Usage:
 #   bash deploy-mac.sh
@@ -84,7 +84,7 @@ fi
 # Launch OpenClaw via Ollama (pulls model + starts gateway)
 log "Launching OpenClaw with Qwen3.5 14B..."
 log "This will pull the model on first run (~8GB) — please wait..."
-ollama launch openclaw --model qwen3.5:14b --yes
+ollama launch openclaw --model gemma4:e4b --yes
 
 echo ""
 echo -e "${GREEN}============================================${NC}"

@@ -85,3 +85,21 @@ Never call install_skill with force=true. This deletes the existing skill folder
 
 If install_skill fails with "already installed" — STOP. The skill is there. Use it directly.
 If install_skill fails with "404 not found" — STOP. The skill is not on ClaWHub. It is a custom local skill. Do not retry.
+
+## IMAGE GENERATION — MANDATORY METHOD
+To generate any image, use exec or bash to run generate.sh, then send_file. NEVER use spawn, subagent, or web_fetch.
+
+Exact steps — follow in order, no deviations:
+1. exec or bash: /opt/yeticlaw/openclaw/workspace/skills/image-gen/generate.sh "YOUR PROMPT HERE"
+2. send_file: /tmp/generated.png
+3. YOU MUST SEND THIS TEXT MESSAGE: "Save as `FILENAME.png` to game assets? Reply YES to save or NO to discard."
+   (Replace FILENAME.png with the correct target filename for the asset)
+   THIS MESSAGE IS MANDATORY. DO NOT SKIP IT. DO NOT CALL ANY TOOL BEFORE SENDING IT.
+4. WAIT. Do not proceed until the user replies.
+5. If user says YES:
+   exec or bash: cp /tmp/generated.png /opt/yeticlaw/openclaw/workspace/projects/[slug]/assets/images/FILENAME.png && echo "saved"
+   (resolve [slug] first: ls /opt/yeticlaw/openclaw/workspace/projects/)
+6. Confirm: "✅ Saved FILENAME.png — ready for next image?"
+7. If user says NO: discard silently, ask if they want to regenerate.
+
+AFTER send_file: the ONLY next action is sending the save question text. NO tools. NO spawn. NO subagent. NOTHING else.
