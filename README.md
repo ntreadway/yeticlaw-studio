@@ -242,22 +242,19 @@ npx @gongrzhe/server-gmail-autoauth-mcp auth
 ### 🍎 macOS
 
 ```bash
-brew install rclone jq node wget ollama
-brew services start ollama
-ollama pull qwen3.5:4b
+# Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh
 
-# Install Picoclaw
-curl -L https://github.com/sipeed/picoclaw/releases/latest/download/picoclaw_Darwin_arm64.tar.gz | tar xz
-sudo mv picoclaw /usr/local/bin/
-picoclaw onboard
+# Install other tools
+brew install rclone jq node
+
+# Launch OpenClaw with gemma4:e4b
+ollama launch openclaw --model gemma4:e4b --yes
 
 # Deploy agents
 tar -xzf yeticlaw-studio.tar.gz && cd yeticlaw-studio
 bash deploy-mac.sh
-
-picoclaw gateway
 ```
-
 
 ---
 
